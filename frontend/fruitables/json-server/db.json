@@ -1,0 +1,160 @@
+{
+  "fruites": [
+    {
+      "id": "1",
+      "fruite": "Grapes",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 4.99,
+      "image": "img/fruite-item-5.jpg"
+    },
+    {
+      "id": "2",
+      "fruite": "Grapes",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 4.99,
+      "image": "img/fruite-item-5.jpg"
+    },
+    {
+      "id": "3",
+      "fruite": "Raspberries",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 4.99,
+      "image": "img/fruite-item-2.jpg"
+    },
+    {
+      "id": "4",
+      "fruite": "Apricots",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 4.99,
+      "image": "img/fruite-item-4.jpg"
+    },
+    {
+      "id": "5",
+      "fruite": "Banana",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 4.99,
+      "image": "img/fruite-item-3.jpg"
+    },
+    {
+      "id": "6",
+      "fruite": "Oranges",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 4.99,
+      "image": "img/fruite-item-1.jpg"
+    },
+    {
+      "id": "7",
+      "fruite": "Raspberries",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 4.99,
+      "image": "img/fruite-item-2.jpg"
+    },
+    {
+      "id": "8",
+      "fruite": "Grapes",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 4.99,
+      "image": "img/fruite-item-1.jpg"
+    }
+  ],
+  "product": [
+    {
+      "id": "1",
+      "name": "Grapes",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 4.99,
+      "image": "img/fruite-item-5.jpg"
+    },
+    {
+      "id": "2",
+      "name": "Grapes",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 8.99,
+      "image": "img/fruite-item-5.jpg"
+    },
+    {
+      "id": "3",
+      "name": "Raspberries",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 4.99,
+      "image": "img/fruite-item-2.jpg"
+    },
+    {
+      "id": "4",
+      "name": "Apricots",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 5.99,
+      "image": "img/fruite-item-4.jpg"
+    },
+    {
+      "id": "5",
+      "name": "Banana",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 4.99,
+      "image": "img/fruite-item-3.jpg"
+    },
+    {
+      "id": "6",
+      "name": "Oranges",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 7.99,
+      "image": "img/fruite-item-1.jpg"
+    },
+    {
+      "id": "7",
+      "name": "Raspberries",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 4.99,
+      "image": "img/fruite-item-2.jpg"
+    },
+    {
+      "id": "8",
+      "name": "Grapes",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt",
+      "price": 8.99,
+      "image": "img/fruite-item-1.jpg"
+    }
+  ],
+  "reviewe": [
+    {
+      "id": "1e0b",
+      "name": "Vraj dhaduk",
+      "email": "earningdone@gmail.com",
+      "review": "scfdfdfedfedf"
+    },
+    {
+      "id": "4315",
+      "name": "meet doba",
+      "email": "meet@gmail.com",
+      "review": "mmmmm\n"
+    }
+  ],
+  "coupon": [
+    {
+      "id": "c5b7",
+      "coupon_name": "VR242",
+      "percentage": "60",
+      "expiry_Date": "2024-04-29"
+    },
+    {
+      "id": "31fe",
+      "coupon_name": "DR242",
+      "percentage": "30",
+      "expiry_Date": "2024-04-22"
+    },
+    {
+      "id": "49fa",
+      "coupon_name": "APR26",
+      "percentage": "22",
+      "expiry_Date": "2024-04-26"
+    }
+  ],
+  "contacts": [
+    {
+      "id": "de14",
+      "address": "vddd",
+      "email": "vraj@gmail.com",
+      "phone": 8780729677
+    }
+  ]
+}
