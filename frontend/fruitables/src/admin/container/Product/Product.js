@@ -102,7 +102,7 @@ function Product() {
     {
       field: 'category_id', headerName: 'Category', width: 150,
       renderCell: (params) => {
-        const category = categories.find((v) => v._id === params.rows.category_id);
+        const category = categories.find((v) => v._id === params.row.category_id);
         
         return category ? category.name : '';
       }

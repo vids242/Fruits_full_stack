@@ -55,7 +55,7 @@ const getsubCategorybyCategory = async (req, res) => {
 
         console.log(req.params.subcategory_id);
 
-        const subcategores = await Subcategories.find({category_id :req.params.category_id});
+        const subcategores = await Subcategories.find({ category_id: req.params.category_id });
         if (!subcategores || subcategores.length === 0) {
             res.status(404).json({
                 success: false,
@@ -88,13 +88,14 @@ const addsubcategory = async (req, res) => {
                 success: false,
                 massage: "data is not found:"
             })
-            res.status(201).json({
-                success: true,
-                massage: "created sucses fully",
-                data: subcategores
-            })
+
 
         }
+        res.status(201).json({
+            success: true,
+            massage: "created sucses fully",
+            data: subcategores
+        })
 
     } catch (error) {
         res.status(500).json({
@@ -106,7 +107,7 @@ const addsubcategory = async (req, res) => {
 }
 const putsubcategories = async (req, res) => {
     try {
-        console.log("jddjdfn",req.params.subcategory_id);
+        console.log("jddjdfn", req.params.subcategory_id);
         const subcategores = await Subcategories.findByIdAndUpdate(req.params.subcategory_id, req.body, { new: true, runValidators: true })
         console.log(subcategores);
 

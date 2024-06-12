@@ -5,7 +5,7 @@ const productSchema = new mongoose.Schema(
         category_id: {
             type: mongoose.Types.ObjectId,
             ref: "Categories",
-           // required: true
+            required: true
         },
 
         subcategory_id: {
