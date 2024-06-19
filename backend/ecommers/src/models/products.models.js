@@ -1,7 +1,14 @@
 const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema(
-    {
+    {   
+        product_img : {
+            type : {
+                public_id: String,
+                url : String
+            }
+
+        },
         category_id: {
             type: mongoose.Types.ObjectId,
             ref: "Categories",
@@ -11,7 +18,7 @@ const productSchema = new mongoose.Schema(
         subcategory_id: {
             type: mongoose.Types.ObjectId,
             ref: "Subcategories",
-            required: true
+           required: true
         },
         name: {
             type: String,

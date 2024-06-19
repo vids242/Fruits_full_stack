@@ -114,7 +114,8 @@ function Contact(props) {
 
 
     return (
-        <>
+        <>  
+        
             <Button variant="outlined" onClick={handleClickOpen}>
                 Open  Contact Form
             </Button>

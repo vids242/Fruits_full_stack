@@ -1,21 +1,48 @@
-import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { get_shopdata } from '../../../redux/action/shop.action';
 import { addTocart } from '../../../redux/slice/cart.slice';
+import { getProducts } from '../../../redux/action/products.action';
+import { ThemeContext } from '../../../Context/ThemeContext';
 
 function Shop(props) {
-    const dispatch = useDispatch()
-    const shopData = useSelector(state => state.shops)
-    console.log(shopData);
+    // const dispatch = useDispatch()
+    // const shopData = useSelector(state => state.shops)
+    // console.log(shopData);
 
+    // const handleAddToCart = (id) => {
+    //     dispatch(addTocart({ id, count: 1 }))
+    // }
+
+    // useEffect(() => {
+    //     dispatch(get_shopdata())
+    // }, [])
+    const dispatch = useDispatch();
+
+    const location = useLocation();
+    const { subcategory_id } = location.state || {};
+  
+    const fruites = useSelector(state => state.fruites)
+  
+    const product = useSelector(state => state.products);
+    console.log(product);
+  
     const handleAddToCart = (id) => {
-        dispatch(addTocart({ id, count: 1 }))
+      dispatch(addTocart({id, count:1}))
     }
-
-    useEffect(() => {
-        dispatch(get_shopdata())
+  
+    React.useEffect(() => {
+    //   dispatch(get_shopdata())
+      dispatch(getProducts());
     }, [])
+  
+    const theme = useContext(ThemeContext);
+  
+    const filteredProducts = subcategory_id
+      ? product.products.filter((v) => v.subcategory_id === subcategory_id)
+      : product.products;
+      console.log(filteredProducts);
     return (
         <div>
             {/* Modal Search Start */}
@@ -219,7 +246,7 @@ function Shop(props) {
                                 </div>
                                 <div className="col-lg-9">
                                     <div className="row g-4 justify-content-center">
-                                        {
+                                        {/* {
                                             shopData.shop.map((v) => (
                                                 <div className="col-md-6 col-lg-6 col-xl-4">
                                                     <Link to={`/Shopdetails/${v.id}`}>
@@ -243,6 +270,25 @@ function Shop(props) {
                                                             </div>
                                                         </div>
                                                     </Link>
+                                                </div>
+                                            ))
+                                        } */}
+                                        {
+                                            filteredProducts.map((v) => (
+                                                <div className="rounded position-relative fruite-item productData">
+                                                    <div className="fruite-img">
+                                                        <img src={v.product_img.url} className="img-fluid  rounded-top" alt />
+                                                    </div>
+
+                                                    <div className="p-4">
+                                                        <h4>{v.name}</h4>
+                                                        <p>{v.description}</p>
+                                                        <p>{v.stock} / Pcs.</p>
+                                                        <div className="d-flex justify-content-between flex-lg-wrap">
+                                                            <p className="text-dark fs-5 fw-bold mb-0">${v.price} / kg</p>
+                                                        </div>
+
+                                                    </div>
                                                 </div>
                                             ))
                                         }

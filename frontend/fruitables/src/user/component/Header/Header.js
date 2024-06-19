@@ -1,23 +1,57 @@
-import React, { useContext } from 'react';
-import { useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { ThemeContext } from '../../../Context/ThemeContext';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
+import { getProducts } from '../../../redux/action/products.action';
+import { getData } from '../../../redux/action/category.action';
+import { getSubData } from '../../../redux/slice/subCategory.slice';
 
 function Header(props) {
+    const dispatch = useDispatch();
+    const [subcat, setSubcat] = useState([])
     const qty = useSelector(state => state.cart)
     // console.log(qty.cart);
 
     const total = qty.cart.reduce((a, v) => a + v.qty, 0)
 
+    const categories = useSelector((state) => state.categories.categories);
+    const subcategories = useSelector((state) => state.subcategories.subcategories);
+    const product = useSelector((state) => state.products.product);
+
+    // console.log(categories);
+    // console.log(subcategories);
+
     const themeContext = useContext(ThemeContext)
-    console.log(themeContext);
+    // console.log(themeContext);
 
     const hendalTheme = () => {
         themeContext.toggleTheme(themeContext.theme)
     }
+    useEffect(() => {
+        dispatch(getProducts());
+        dispatch(getData());
+        dispatch(getSubData());
+    }, [dispatch]);
 
+    const navigate = useNavigate()
+    const handleCategory = (category_id) => {
+        console.log(category_id);
+
+        const subdata = subcategories.filter((v) => v.category_id === category_id);
+        setSubcat(subdata);
+
+        document.getElementById("subright").style.display = "block";
+    };
+
+    const handleDisplay = (subcategory_id) => {
+        console.log(subcategory_id);
+
+
+
+        navigate('/Shop', { state: { subcategory_id } });
+    };
     return (
 
         <div>
@@ -56,6 +90,19 @@ function Header(props) {
                                         <a href="chackout.html" className="dropdown-item">Chackout</a>
                                         <a href="testimonial.html" className="dropdown-item">Testimonial</a>
                                         <a href="404.html" className="dropdown-item">404 Page</a>
+                                    </div>
+                                </div>
+                                <div className="nav-item dropdown main">
+                                    <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Products</a>
+                                    <div className="dropdown-menu m-0 bg-secondary rounded-0">
+                                        {categories.map((v) => (
+                                            <a href="" onMouseMove={() => handleCategory(v._id)} onClick={() => handleCategory(v._id)} className="dropdown-item">{v.name}</a>
+                                        ))}
+                                    </div>
+                                    <div className="dropdown-menu m-0 bg-secondary rounded-0" id='subright'>
+                                        {subcat.map((v) => (
+                                            <a href="" onClick={() => handleDisplay(v._id)} className="dropdown-item">{v.name}</a>
+                                        ))}
                                     </div>
                                 </div>
                                 <NavLink to="/contact" className="nav-item nav-link">Contact</NavLink>

@@ -14,7 +14,7 @@ const subcategorieslist = async (req, res) => {
             success: true,
             data: subcategoris
         })
-        console.log(subcategoris);
+        // console.log(subcategoris);
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -27,7 +27,7 @@ const subcategorieslist = async (req, res) => {
 const getsubcategory = async (req, res) => {
     try {
 
-        console.log(req.params.subcategory_id);
+        // console.log(req.params.subcategory_id);
 
         const subcategores = await Subcategories.findById(req.params.subcategory_id);
         if (!subcategores || subcategores.length === 0) {
@@ -40,7 +40,7 @@ const getsubcategory = async (req, res) => {
             success: true,
             data: subcategores
         })
-        console.log(subcategores);
+        // console.log(subcategores);
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -53,7 +53,7 @@ const getsubcategory = async (req, res) => {
 const getsubCategorybyCategory = async (req, res) => {
     try {
 
-        console.log(req.params.subcategory_id);
+        // console.log(req.params.subcategory_id);
 
         const subcategores = await Subcategories.find({ category_id: req.params.category_id });
         if (!subcategores || subcategores.length === 0) {
@@ -66,7 +66,7 @@ const getsubCategorybyCategory = async (req, res) => {
             success: true,
             data: subcategores
         })
-        console.log(subcategores);
+        // console.log(subcategores);
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -81,7 +81,7 @@ const addsubcategory = async (req, res) => {
     try {
 
         const subcategores = await Subcategories.create(req.body);
-        console.log(subcategores);
+        // console.log(subcategores);
 
         if (!subcategores) {
             res.status(400).json({
@@ -107,9 +107,9 @@ const addsubcategory = async (req, res) => {
 }
 const putsubcategories = async (req, res) => {
     try {
-        console.log("jddjdfn", req.params.subcategory_id);
+        // console.log("jddjdfn", req.params.subcategory_id);
         const subcategores = await Subcategories.findByIdAndUpdate(req.params.subcategory_id, req.body, { new: true, runValidators: true })
-        console.log(subcategores);
+        // console.log(subcategores);
 
         if (!subcategores) {
             res.status(400).json({
@@ -134,7 +134,7 @@ const putsubcategories = async (req, res) => {
 const deletesubcategory = async (req, res) => {
     try {
 
-        console.log(req.params.subcategorydelete_id);
+        // console.log(req.params.subcategorydelete_id);
 
         const subcategores = await Subcategories.findByIdAndDelete(req.params.subcategorydelete_id);
         if (!subcategores || subcategores.length === 0) {
@@ -147,7 +147,7 @@ const deletesubcategory = async (req, res) => {
             success: true,
             data: subcategores
         })
-        console.log(subcategores);
+        // console.log(subcategores);
     } catch (error) {
         res.status(500).json({
             success: false,

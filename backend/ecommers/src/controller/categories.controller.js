@@ -31,7 +31,7 @@ const addcategories = async (req, res) => {
 
 
         const category = await Categories.create(req.body)
-        console.log(category);
+        // console.log(category);
 
         if (!category) {
             res.status(400).json({
@@ -79,7 +79,7 @@ const deletecategories = async (req, res) => {
     }
 }
 const updatecategories = async (req,res) => {
-   console.log("dhuwhfhf",req.params.category_id,req.body);
+//    console.log("dhuwhfhf",req.params.category_id,req.body);
     try {
         const category = await Categories.findByIdAndUpdate(req.params.category_id,req.body,{new:true,runValidators:true})
        

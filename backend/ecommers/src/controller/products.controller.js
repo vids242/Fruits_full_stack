@@ -1,4 +1,5 @@
 const Products = require("../models/products.models");
+const uploadFiles = require("../utils/cloudinary");
 
 const listproducts = async (req, res) => {
     try {
@@ -27,10 +28,10 @@ const listproducts = async (req, res) => {
 
 const getproducts = async (req, res) => {
     try {
-        console.log(req.params.product_id);
+        // console.log(req.params.product_id);
 
         const product = await Products.findById(req.params.product_id);
-        console.log(product);
+        // console.log(product);
 
         if (!product) {
             res.status(404).json({
@@ -56,9 +57,17 @@ const getproducts = async (req, res) => {
 const addproducts = async (req, res) => {
     try {
         console.log(req.body);
+        // console.log(req.file);
 
-        const product = await Products.create(req.body);
-        console.log(product);
+       const fileRes = await uploadFiles(req.file.path,"Product")
+    //    console.log(fileRes);
+        const product = await Products.create({...req.body,
+            product_img : {
+                public_id : fileRes.public_id,
+                url : fileRes.url
+            }
+        });
+        // console.log(product);
 
         if (!product) {
             res.status(400).json({
@@ -87,7 +96,7 @@ const deleteproducts = async (req, res) => {
         console.log(req.params.product_id);
 
         const product = await Products.findByIdAndDelete(req.params.product_id);
-        console.log(product);
+        // console.log(product);
 
         if (!product) {
             res.status(404).json({
@@ -115,8 +124,8 @@ const updateproducts = async (req, res) => {
         console.log("acbd", req.params.product_id, req.body);
 
         const product = await Products.findByIdAndUpdate(req.params.product_id, req.body, { new: true, runValidators:true});
-        console.log(product);
-
+        // console.log(product);
+        console.log(req.params);
         if (!product) {
             res.status(400).json({
                 success: false,

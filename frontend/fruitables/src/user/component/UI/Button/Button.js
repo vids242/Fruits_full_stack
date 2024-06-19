@@ -2,7 +2,7 @@ import React from 'react';
 import { PrimaryButton, SecondaryButton } from './Button.style';
 
 function Button({ children, btnType = "primary", btnDisable = false, ...rest }) {
-    console.log(btnType);
+    // console.log(btnType);
 
     const checkButtonType = () => {
         switch (btnType) {
