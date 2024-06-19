@@ -23,6 +23,7 @@ routes.post(
 
 routes.put(
     '/update-products/:product_id', 
+    upload.single("product_img"),
     productsController.updateproducts
 )
 

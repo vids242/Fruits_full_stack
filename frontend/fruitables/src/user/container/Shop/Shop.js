@@ -277,12 +277,12 @@ function Shop(props) {
                                             filteredProducts.map((v) => (
                                                 <div className="rounded position-relative fruite-item productData">
                                                     <div className="fruite-img">
-                                                        <img src={v.product_img.url} className="img-fluid  rounded-top" alt />
+                                                        <img src={v.product_img.url} className="img-fluid  rounded-top pro_img" alt />
                                                     </div>
 
                                                     <div className="p-4">
                                                         <h4>{v.name}</h4>
-                                                        <p>{v.description}</p>
+                                                        <p className='max-length' >{v.description}</p>
                                                         <p>{v.stock} / Pcs.</p>
                                                         <div className="d-flex justify-content-between flex-lg-wrap">
                                                             <p className="text-dark fs-5 fw-bold mb-0">${v.price} / kg</p>
