@@ -9,6 +9,8 @@ import Counter from '../admin/container/ToolkitCounter/Counter';
 import Coupan from '../admin/container/Coupan/Coupan';
 import Contact from '../admin/container/Contact/Contact';
 import SubCategory from '../admin/container/Subcategory/SubCategory';
+import Variants from '../admin/container/Variant/Variants';
+
 
 function AdminRouter(props) {
     return (
@@ -23,6 +25,7 @@ function AdminRouter(props) {
                     <Route exact path="/counter" element={<Counter />} />
                     <Route exact path="/coupan" element={<Coupan />} />
                     <Route exact path="/contact" element={<Contact />} />
+                    <Route expat  path = "/variant" element={<Variants/>}/>
                 </Routes>
             </Layout>
         </div>

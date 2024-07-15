@@ -129,10 +129,11 @@ const updateproducts = async (req, res) => {
         //    console.log(fileRes);
 
         const product = await Products.findByIdAndUpdate(req.params.product_id,
-            {...req.body,
-                product_img : {
-                    public_id : fileRes.public_id,
-                    url:fileRes.url
+            {
+                ...req.body,
+                product_img: {
+                    public_id: fileRes.public_id,
+                    url: fileRes.url
                 }
             },
             { new: true, runValidators: true }
@@ -202,10 +203,215 @@ const updateproducts = async (req, res) => {
     // }
 }
 
+const searchName = async (req, res) => {
+
+    const products = await Products.aggregate([
+        {
+            $match: {
+                "name": /^[a-zA-Z0-9!@#$&()`.+,/"-]*$/
+            }
+        }
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "Products get  succesfully",
+        data: products
+    })
+
+    console.log(products);
+
+}
+
+const productsByCategory = async (req, res) => {
+
+    const products = await Products.aggregate([
+
+        {
+            $lookup: {
+                from: "categories",
+                localField: "category_id",
+                foreignField: "_id",
+                as: "category"
+            }
+        },
+        {
+            $unwind: {
+                path: "$category"
+            }
+        },
+        {
+            $project: {
+                "name": 1,
+                "product_img.url": 1,
+                "category": 1
+            }
+        }
+
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "Products get  succesfully",
+        data: products
+    })
+
+    console.log(products);
+
+}
+
+const productsBySubcategory = async (req, res) => {
+
+    const products = await Products.aggregate([
+
+        {
+            $lookup: {
+                from: "subcategories",
+                localField: "subcategory_id",
+                foreignField: "_id",
+                as: "subcategory"
+            }
+        },
+        {
+            $unwind: {
+                path: "$subcategory"
+            }
+        },
+        {
+            $project: {
+                "name": 1,
+                "product_img.url": 1,
+                "subcategory": 1
+            }
+        }
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "Products get  succesfully",
+        data: products
+    })
+
+    console.log(products);
+
+}
+
+const topRate = async (req, res) => {
+
+    const products = await Products.aggregate([
+        {
+            $lookup: {
+                from: "reviews",
+                localField: "_id",
+                foreignField: "product_id",
+                as: "review"
+            }
+        },
+        {
+            $unwind: {
+                path: "$review"
+            }
+        },
+        {
+            $group: {
+                _id: "$_id",
+                "product_name": { $first: "$name" },
+                "Totalrating": {
+                    $sum: "$review.rating"
+                }
+            }
+        },
+        {
+            $sort: {
+                "Totalrating": -1
+            }
+        },
+        {
+            $limit: 1
+        }
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "Products get  succesfully",
+        data: products
+    })
+
+    console.log(products);
+
+}
+
+const newArrivals = async (req, res) => {
+
+    const products = await Products.aggregate([
+        {
+            $sort: {
+                "createdAt": -1
+            }
+        },
+        {
+            $limit: 3
+        }
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "Products get  succesfully",
+        data: products
+    })
+
+    console.log(products);
+
+}
+
+const countCategories = async (req, res) => {
+
+    const products = await Products.aggregate([
+        {
+            $lookup: {
+                from: "categories",
+                localField: "category_id",
+                foreignField: "_id",
+                as: "category"
+            }
+        },
+        {
+            $unwind: {
+                path: "$category"
+            }
+        },
+        {
+            $group: {
+                _id: "$category._id",
+                "category_name": { $first: "$category.name" },
+                "product_name": { $push: "$name" },
+                "TotalProduct": {
+                    $sum: 1
+                }
+            }
+        }
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "Products get  succesfully",
+        data: products
+    })
+
+    console.log(products);
+
+}
+
 module.exports = {
     listproducts,
     getproducts,
     addproducts,
     deleteproducts,
-    updateproducts
+    updateproducts,
+    searchName,
+    productsByCategory,
+    productsBySubcategory,
+    topRate,
+    newArrivals,
+    countCategories
 }

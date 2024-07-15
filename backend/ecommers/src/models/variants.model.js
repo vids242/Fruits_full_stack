@@ -1,37 +1,39 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-//sub Schema
-const attributesSchema = new mongoose.Schema(
-    {
-        name : {
-            type : String,
-            trim : true,
-            lowercase : true,
-            required : true,
-        },
-        value : {
-            type : String,
-            required : true,
-        },
-        price : {
-            type : Number,
-            required :  true
-        },
-        stock : {
-            type : Number,
-            required :  true
-        },
-    }
-)
 
 const variantSchema = new mongoose.Schema(
     {
         product_id: {
             type: mongoose.Types.ObjectId,
-            ref: "Products",
+            ref: 'Products',
             required: true
         },
-        attributes: [attributesSchema],
+        category_id: {
+            type: mongoose.Types.ObjectId,
+            ref:'Categories',
+            require: true,
+        },
+        subcategory_id:{
+            type: mongoose.Types.ObjectId,
+            ref:'Subcategories',
+            require: true
+        },
+        price: {
+            type: Number
+        },
+        stock: {
+            type: Number
+        },
+        discount: {
+            type: Number
+        },
+        attributes: {},
+        img: {
+            type:{
+                public_id:String,
+                url:String
+            }
+        },
         isActive: {
             type: Boolean,
             default: true
@@ -43,5 +45,5 @@ const variantSchema = new mongoose.Schema(
     }
 )
 
-const Variants = mongoose.model("Variants", variantSchema)
+const Variants = mongoose.model('Variants', variantSchema)
 module.exports = Variants

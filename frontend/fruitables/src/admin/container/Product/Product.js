@@ -56,7 +56,7 @@ function Product() {
 
   const productSchema = object({
     name: string().required("Please enter name"),
-    description: string().required("Please enter description"),
+    discription: string().required("Please enter description"),
     price: number().required("Please enter price").positive("Price must be positive"),
     category_id: string().required("Please select a category"),
     subcategory_id: string().required("Please select a subcategory"),
@@ -86,7 +86,7 @@ function Product() {
       subcategory_id: '',
       category_id: '',
       name: '',
-      description: '',
+      discription: '',
       price: '',
       stock: '',
       product_img: ''
@@ -143,7 +143,7 @@ function Product() {
       ),
     },
 
-    { field: 'description', headerName: 'Product Description', width: 160 },
+    { field: 'discription', headerName: 'Product Description', width: 160 },
     { field: 'price', headerName: 'Product Price', width: 160 },
     { field: 'stock', headerName: 'Products Stock', width: 160 },
 
@@ -232,17 +232,17 @@ function Product() {
             />
             <TextField
               margin="dense"
-              id="description"
-              name="description"
+              id="discription"
+              name="discription"
               label="Description"
               type="text"
               fullWidth
               variant="standard"
               onChange={handleChange}
               onBlur={handleBlur}
-              value={values.description}
-              error={errors.description && touched.description}
-              helperText={errors.description && touched.description ? errors.description : ''}
+              value={values.discription}
+              error={errors.discription && touched.discription}
+              helperText={errors.discription && touched.discription ? errors.discription : ''}
             />
             <TextField
               margin="dense"

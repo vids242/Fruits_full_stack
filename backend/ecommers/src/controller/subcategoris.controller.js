@@ -105,6 +105,7 @@ const addsubcategory = async (req, res) => {
 
     }
 }
+
 const putsubcategories = async (req, res) => {
     try {
         // console.log("jddjdfn", req.params.subcategory_id);
@@ -131,6 +132,7 @@ const putsubcategories = async (req, res) => {
         })
     }
 }
+
 const deletesubcategory = async (req, res) => {
     try {
 
@@ -157,11 +159,175 @@ const deletesubcategory = async (req, res) => {
     }
 }
 
+const countActive = async (req, res) => {
+    const subcategores = await Subcategories.aggregate([
+        {
+            $match: {
+                "isActive": true
+            }
+        },
+        {
+            $count: "NoOfActive"
+        }
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "subcategory get  succesfully",
+        data: subcategores
+    })
+}
+
+const mostproducts = async (req, res) => {
+    const subcategores = await Subcategories.aggregate([
+        {
+            $lookup: {
+                from: "products",
+                localField: "_id",
+                foreignField: "subcategory_id",
+                as: "product"
+            }
+        },
+        {
+            $match: {
+                product: { $ne: [] }
+            }
+        },
+        {
+            $unwind: {
+                path: "$product"
+            }
+        },
+        {
+            $group: {
+                _id: "$_id",
+                name: { $first: "$name" },
+                productsCount: {
+                    $sum: 1
+                }
+            }
+        },
+        {
+            $sort: {
+                productsCount: -1
+            }
+        },
+        {
+            $limit: 2
+        }
+    ])
+    res.status(200).json({
+        success: true,
+        message: "subcategory get  succesfully",
+        data: subcategores
+    })
+}
+
+const parentOfSubcategory = async (req, res) => {
+
+    const subcategories = await Subcategories.aggregate([
+        {
+            $lookup: {
+                from: "categories",
+                localField: "category_id",
+                foreignField: "_id",
+                as: "category"
+            }
+        },
+        {
+            $project: {
+                "name": 1,
+                "category": 1
+            }
+        }
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "Subcategories get  succesfully",
+        data: subcategories
+    })
+
+    console.log(subcategories);
+
+}
+
+const countInactive = async (req, res) => {
+
+    const subcategories = await Subcategories.aggregate([
+        {
+            $match: {
+                "isActive": false
+            }
+        },
+        {
+            $count: 'NoOfInActiveSubcategory'
+        }
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "Subcategories get  succesfully",
+        data: subcategories
+    })
+
+    console.log(subcategories);
+
+}
+
+const countProducts = async (req, res) => {
+
+    const subcategories = await Subcategories.aggregate([
+        {
+            $lookup: {
+                from: "products",
+                localField: "_id",
+                foreignField: "subcategory_id",
+                as: "product"
+            }
+        },
+        {
+            $match: {
+                "product": { $ne: [] }
+            }
+        },
+        {
+            $unwind: {
+                path: "$product"
+            }
+        },
+        {
+            $group: {
+                _id: "$_id",
+                "subcategory_name": { $first: "$name" },
+                "CountProduct": {
+                    $sum: 1
+                },
+                "product_name": { $push: "$product.name" }
+            }
+        }
+    ])
+
+    res.status(200).json({
+        success: true,
+        message: "Subcategories get  succesfully",
+        data: subcategories
+    })
+
+    console.log(subcategories);
+
+}
+
 module.exports = {
     subcategorieslist,
     getsubcategory,
     addsubcategory,
     putsubcategories,
     deletesubcategory,
-    getsubCategorybyCategory
+    getsubCategorybyCategory,
+    countActive,
+    mostproducts,
+    countInactive,
+    countProducts,
+    parentOfSubcategory
 }

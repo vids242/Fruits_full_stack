@@ -11,24 +11,54 @@ routes.get(
 )
 
 routes.get(
-    '/get-products/:product_id', 
+    '/get-products/:product_id',
     productsController.getproducts
 )
 
+routes.get(
+    '/search/:name',
+    productsController.searchName
+)
+
+routes.get(
+    '/list-category/:category_id',
+    productsController.productsByCategory
+)
+
+routes.get(
+    '/list-subcategory/:subcategory_id',
+    productsController.productsBySubcategory
+)
+
+routes.get(
+    '/top-rated',
+    productsController.topRate
+)
+
+routes.get(
+    '/new-arrivals',
+    productsController.newArrivals
+)
+
+routes.get(
+    '/count-categories',
+    productsController.countCategories
+)
+
 routes.post(
-    '/add-products', 
+    '/add-products',
     upload.single("product_img"),
     productsController.addproducts
 )
 
 routes.put(
-    '/update-products/:product_id', 
+    '/update-products/:product_id',
     upload.single("product_img"),
     productsController.updateproducts
 )
 
 routes.delete(
-    '/delete-products/:product_id', 
+    '/delete-products/:product_id',
     productsController.deleteproducts
 )
 

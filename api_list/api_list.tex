@@ -1,0 +1,1354 @@
+1. Count the total number of active users.
+
+[
+  {
+    $match: {
+      "isActive" : true
+    }
+  },
+  {
+    $count: 'NoOfActiveUsers'
+  }
+]
+
+
+{
+  "NoOfActiveUsers": 6
+}
+
+--------------------------------------------------------------------------------------------------
+2. Find the average age of male and female.
+
+[
+  {
+    $group: {
+      _id: "$gender",
+      "AveAge" : {
+        $avg : "$age"
+      }
+    }
+  }
+]
+
+
+{
+  "_id": "Male",
+  "AveAge": 28.8
+}
+{
+  "_id": "Female",
+  "AveAge": 28.2
+}
+
+--------------------------------------------------------------------------------------------------
+3. Give the total number of posts by active users.
+
+[
+  {
+   $match: {
+     "isActive" : true
+   }
+  },
+  {
+    $unwind: {
+      path: "$posts",
+    }
+  },
+  {
+    $group: {
+      _id: "$_id",
+     "NoOfPost" : {
+       $sum : 1
+     }
+    }
+  }
+]
+
+
+{
+  "_id": 1,
+  "NoOfPost": 2
+}
+{
+  "_id": 2,
+  "NoOfPost": 2
+}
+{
+  "_id": 4,
+  "NoOfPost": 2
+}
+{
+{
+  "_id": 6,
+  "NoOfPost": 2
+}
+{
+  "_id": 8,
+  "NoOfPost": 2
+}
+
+  "_id": 10,
+  "NoOfPost": 2
+}
+
+
+--------------------------------------------------------------------------------------------------
+4. Count the total number of comments.
+
+[
+  {                                             
+    $unwind: {
+      path: "$posts",
+    }
+  },
+  {
+    $unwind: {
+      path: "$posts.comments",
+    }
+  },
+  {
+    $group: {
+      _id:"$_id",
+    "NoOfCommnet" : {
+      $sum : 1
+    }
+    }
+  }
+]
+
+
+{
+  "_id": 1,
+  "NoOfCommnet": 3
+}
+{
+  "_id": 2,
+  "NoOfCommnet": 3
+}
+{
+  "_id": 3,
+  "NoOfCommnet": 2
+}
+{
+  "_id": 4,
+  "NoOfCommnet": 3
+}
+{
+  "_id": 5,
+  "NoOfCommnet": 2
+}
+{
+  "_id": 6,
+  "NoOfCommnet": 2
+}
+{
+  "_id": 7,
+  "NoOfCommnet": 2
+}
+{
+  "_id": 8,
+  "NoOfCommnet": 3
+}
+{
+  "_id": 9,
+  "NoOfCommnet": 3
+}
+{
+  "_id": 10,
+  "NoOfCommnet": 3
+}
+----method2--------------------------------------------
+[
+  {                                             
+    $unwind: {
+      path: "$posts",
+    }
+  },
+  {
+    $project: {
+      "NoOfComment" : {
+        $size : "$posts.comments"
+      }
+    }
+  },
+  {
+    $group: {
+      _id: null,
+      "TotalComment" : {
+        $sum : "$NoOfComment"
+      }
+    }
+  },
+ 
+]
+
+{
+  "_id": null,
+  "TotalComment": 26
+}
+
+--------------------------------------------------------------------------------------------------
+5. List users and their total likes.
+
+[
+  {
+    $unwind: {
+      path: "$posts",
+    }
+  },
+  {
+    $group: {
+      _id: "$_id",
+     "Name" : {
+       $first : "$name"
+     },
+      "NoOFLikes" : {
+        $sum : "$posts.likes"
+      }
+    }
+  }
+  
+]
+
+{
+  "_id": 1,
+  "Name": "John Doe",
+  "NoOFLikes": 35
+}
+{
+  "_id": 2,
+  "Name": "Alice Johnson",
+  "NoOFLikes": 35
+}
+{
+  "_id": 3,
+  "Name": "Bob Williams",
+  "NoOFLikes": 40
+}
+{
+  "_id": 4,
+  "Name": "Diana Brown",
+  "NoOFLikes": 42
+}
+{
+  "_id": 5,
+  "Name": "Elijah Wilson",
+  "NoOFLikes": 32
+}
+{
+  "_id": 6,
+  "Name": "Fiona Miller",
+  "NoOFLikes": 47
+}
+{
+  "_id": 7,
+  "Name": "George Taylor",
+  "NoOFLikes": 38
+}
+{
+  "_id": 8,
+  "Name": "Hannah Robinson",
+  "NoOFLikes": 43
+}
+{
+  "_id": 9,
+  "Name": "Isaac Moore",
+  "NoOFLikes": 32
+}
+{
+  "_id": 10,
+  "Name": "Jasmine Hill",
+  "NoOFLikes": 43
+}
+
+--------------------------------------------------------------------------------------------------
+6. Find the user name with the maximum likes of posts.
+
+[
+  {
+    $unwind: {
+      path: "$posts"
+    }
+  },
+  {
+    $group: {
+      _id: "$_id",
+      "Name" : {
+        $first : "$name"
+      },
+      "TotalLike": {
+        $sum: "$posts.likes"
+      }
+    }
+  },
+  {
+    $sort: {
+      "TotalLike": -1
+    }
+  },
+  {
+    $limit: 1
+  }
+]
+
+
+{
+  "_id": 6,
+  "Name": "Fiona Miller",
+  "TotalLike": 47
+}
+
+
+
+[
+  {
+    $unwind: {path : "$posts"}
+  },
+  {
+    $group: {
+      _id: "$_id",
+      "Name" : {
+        $first : "$name"
+      },
+			"TotalLikes" : {
+        $sum : "$posts.likes"
+      }
+    }
+  },
+  {
+    $sort: {
+      TotalLikes: -1
+    }
+  },
+  {
+    $limit: 1
+  }
+]
+
+{
+  "_id": 6,
+  "Name": "Fiona Miller",
+  "TotalLikes": 47
+}
+
+--------------------------------------------------------------------------------------------------
+7. Count the number of active and inactive users.
+
+[
+  {
+    $group: {
+      _id: "$isActive",
+      "NoOfCount": {
+        $sum: 1
+      }
+    }
+  }
+]
+
+
+{
+  "_id": true,
+  "NoOfCount": 6
+}
+{
+  "_id": false,
+  "NoOfCount": 4
+}
+
+
+
+[
+  {
+    $group: {
+      _id: "$isActive",
+      "isActive" : {
+        $first : "$isActive"
+      },
+     "CountUsers" : {
+       $sum : 1
+     }
+    }
+  },
+  {
+    $project: {
+     _id : 0
+    }
+  }
+]
+
+{
+  "isActive": true,
+  "CountUsers": 6
+}
+{
+  "isActive": false,
+  "CountUsers": 4
+}
+--------------------------------------------------------------------------------------------------
+8. List the cities with the highest average age.
+
+[
+  {
+    $group: {
+      _id: "$city",
+      "AvgAge": {
+        $avg: "$age"
+      }
+    }
+  },
+  {
+    $sort: {
+      "AvgAge": -1 
+    }
+  }
+]
+
+
+{
+  "_id": "Los Angeles",
+  "AvgAge": 31
+}
+{
+  "_id": "San Francisco",
+  "AvgAge": 28.666666666666668
+}
+{
+  "_id": "Portland",
+  "AvgAge": 27
+}
+{
+  "_id": "New York",
+  "AvgAge": 26
+}
+
+
+[
+  {
+    $group: {
+      _id: "$city",
+      "City" : {
+        $first : "$city"
+      },
+      "AveAge" : {
+        $avg : "$age"
+      }
+    }
+  },
+  {
+    $project: {
+      _id : 0
+    }
+  },
+  {
+    $sort: {
+      AveAge: -1
+    }
+  }
+]
+
+{
+  "City": "Los Angeles",
+  "AveAge": 31
+}
+
+--------------------------------------------------------------------------------------------------
+9. Count the number of users in each city.
+
+[
+  {
+    $group: {
+      _id: "$city",
+     	"CountOfCity": {
+        $sum: 1
+      }
+    }
+  }
+]
+
+
+{
+  "_id": "Los Angeles",
+  "CountOfCity": 3
+}
+{
+  "_id": "Portland",
+  "CountOfCity": 2
+}
+{
+  "_id": "New York",
+  "CountOfCity": 2
+}
+{
+  "_id": "San Francisco",
+  "CountOfCity": 3
+}
+
+
+
+[
+  {
+    $group: {
+      _id: "$city",
+        "City" : {
+        $first : "$city"
+      },
+     	"CountOfCity": {
+        $sum: 1
+      }
+    }
+  },
+    {
+    $project: {
+      _id : 0
+    }
+  },
+]
+
+{
+  "City": "San Francisco",
+  "CountOfCity": 3
+}
+
+--------------------------------------------------------------------------------------------------
+
+10. Count the number of users with JavaScript skills.
+
+[
+  {
+    $match: {
+    	"skills" : "JavaScript"
+    }
+  },
+  {
+    $count: 'NoOfJavascript'
+  }
+]
+
+{
+  "NoOfJavascript": 6
+}
+--------------------------------------------------------------------------------------------------
+11. Count the number of users with each skill.
+
+[
+  {
+    $unwind : "$skills"
+  },
+  {
+    $group: {
+      _id: "$skills",
+     totalcount: {
+        $sum: 1
+      }
+    }
+  }
+]
+
+{
+  "_id": "Angular",
+  "totalcount": 1
+}
+{
+  "_id": "Spring Boot",
+  "totalcount": 2
+}
+{
+  "_id": "JavaScript",
+  "totalcount": 6
+}
+{
+  "_id": "React",
+  "totalcount": 4
+}
+{
+  "_id": "Java",
+  "totalcount": 2
+}
+{
+  "_id": "MongoDB",
+  "totalcount": 2
+}
+{
+  "_id": "Django",
+  "totalcount": 2
+}
+{
+  "_id": "Vue.js",
+  "totalcount": 2
+}
+{
+  "_id": "Node.js",
+  "totalcount": 4
+}
+{
+  "_id": "Express.js",
+  "totalcount": 2
+}
+
+
+--------------------------------------------------------------------------------------------------
+12. Find users who have posts with more than 15 likes and a specific skill.
+
+[
+  {
+    $unwind: "$posts"
+  },
+  {
+    $match: {
+      $and : [
+        {"posts.likes" : {$gt : 15}},
+        {"skills" :"React" }
+      ]
+    }
+  }
+]
+
+
+--------------------------------------------------------------------------------------------------
+13. Find users with the highest total number of likes across all posts.
+
+[
+  {
+    $unwind: "$posts"
+  },
+  {
+    $sort: {
+      "posts.likes": -1
+    }
+  },
+  {
+    $limit: 1
+  }
+]
+
+{
+  "_id": 4,
+  "name": "Diana Brown",
+  "age": 30,
+  "city": "San Francisco",
+  "gender": "Female",
+  "posts": {
+    "title": "Post 8",
+    "likes": 30,
+    "comments": [
+      "Well done",
+      "Great post!"
+    ]
+  },
+  "friends": [
+    5,
+    6
+  ],
+  "skills": [
+    "React",
+    "Node.js",
+    "MongoDB"
+  ],
+  "isActive": true
+}
+
+--------------------------------------------------------------------------------------------------
+14. Find users who have friends and count the number of friends.
+
+[
+  {
+    $match: {
+      "friends" : {$exists : true, $ne: []}
+    }
+  },
+  {
+    $project: {
+      "totalFriends" : {
+        $size:"$friends"
+      }
+    }
+  }
+]
+
+{
+  "_id": 2,
+  "totalFriends": 2
+}
+{
+  "_id": 1,
+  "totalFriends": 2
+}
+{
+  "_id": 8,
+  "totalFriends": 2
+}
+{
+  "_id": 9,
+  "totalFriends": 2
+}
+{
+  "_id": 4,
+  "totalFriends": 2
+}
+{
+  "_id": 3,
+  "totalFriends": 2
+}
+{
+  "_id": 6,
+  "totalFriends": 2
+}
+{
+  "_id": 5,
+  "totalFriends": 2
+}
+{
+  "_id": 7,
+  "totalFriends": 2
+}
+{
+  "_id": 10,
+  "totalFriends": 2
+}
+--------------------------------------------------------------------------------------------------
+15. Find users who have at least one post with a specific comment and a specific skill.
+
+[
+  {
+    $unwind: {
+      path: "$posts",
+    }
+  },
+  {
+    $match: {
+      $and: [
+        {"posts.comments" : "Nice!"},
+        {"skills" : "JavaScript"}
+        
+      ]
+    }
+  }
+]
+
+{
+  "_id": 2,
+  "name": "Alice Johnson",
+  "age": 32,
+  "city": "Los Angeles",
+  "gender": "Female",
+  "posts": {
+    "title": "Post 3",
+    "likes": 10,
+    "comments": [
+      "Nice!",
+      "Awesome"
+    ]
+  },
+  "friends": [
+    1,
+    3
+  ],
+  "skills": [
+    "Python",
+    "Django",
+    "JavaScript"
+  ],
+  "isActive": true
+}
+% jema commet nice and skill javascript hoy tej display
+--------------------------------------------------------------------------------------------------
+16. Count users who have skills javascript and react.
+
+[
+  {
+    $match: {
+      "skills": { $all:["JavaScript", "React"] }
+    }
+  }, 
+  {
+    $count: 'NoUser'
+  }
+]
+
+
+{
+  "NoUser": 2
+}
+
+--------------------------------------------------------------------------------------------------
+17. count user who have second skills as React
+
+[
+  {
+    $match: {
+      "skills.1" : "React"
+    }
+  },
+  {
+    $count: 'NoUser'
+  }
+]
+
+
+{
+  "NoUser": 2
+}
+
+--------------------------------------------------------------------------------------------------
+18. Categorise users by their city and gives their id and name.
+
+[
+  {
+    $group: {
+      _id: "$city",
+      "Users" : {
+        $push : {
+          id : "$_id",
+          name : "$name"
+        }
+      }
+    }
+  }
+]
+
+
+
+{
+  "_id": "Los Angeles",
+  "User": [
+    {
+      "_id": 2,
+      "name": "Alice Johnson"
+    },
+    {
+      "_id": 5,
+      "name": "Elijah Wilson"
+    },
+    {
+      "_id": 7,
+      "name": "George Taylor"
+    }
+  ]
+}
+
+{
+  "_id": "San Francisco",
+  "User": [
+    {
+      "_id": 8,
+      "name": "Hannah Robinson"
+    },
+    {
+      "_id": 4,
+      "name": "Diana Brown"
+    },
+    {
+      "_id": 6,
+      "name": "Fiona Miller"
+    }
+  ]
+}
+
+{
+  "_id": "New York",
+  "User": [
+    {
+      "_id": 1,
+      "name": "John Doe"
+    },
+    {
+      "_id": 3,
+      "name": "Bob Williams"
+    },
+    {
+      "_id": 11,
+      "name": "John Doe"
+    },
+    {
+      "_id": 12,
+      "name": "John Doe"
+    }
+  ]
+}
+
+{
+  "_id": "Portland",
+  "User": [
+    {
+      "_id": 9,
+      "name": "Isaac Moore"
+    },
+    {
+      "_id": 10,
+      "name": "Jasmine Hill"
+    }
+  ]
+}
+
+--------------------------------------------------------------------------------------------------
+19. Give user data whose city name starts with "New".
+
+[
+  {
+    $match: {
+      "city" : {$regex:  "New"}
+    }
+  }
+]
+
+{
+  "_id": 1,
+  "name": "John Doe",
+  "age": 28,
+  "city": "New York",
+  "gender": "Male",
+  "posts": [
+    {
+      "title": "Post 1",
+      "likes": 15,
+      "comments": [
+        "Great post!",
+        "Interesting"
+      ]
+    },
+    {
+      "title": "Post 2",
+      "likes": 20,
+      "comments": [
+        "Well done"
+      ]
+    }
+  ],
+  "friends": [
+    2,
+    3
+  ],
+  "skills": [
+    "JavaScript",
+    "React",
+    "Node.js"
+  ],
+  "isActive": true
+}
+% as it is jena city ma New start thato hase e j data batavase... [1, 3, 11, 12]
+
+[
+  {
+    $match: {
+      "city" : /^New[a-zA-Z ]+$/
+    }
+  }
+]
+
+{
+  "_id": 1,
+  "name": "John Doe",
+  "age": 28,
+  "city": "New York",
+  "gender": "Male",
+  "posts": [
+    {
+      "title": "Post 1",
+      "likes": 15,
+      "comments": [
+        "Great post!",
+        "Interesting"
+      ]
+    },
+    {
+      "title": "Post 2",
+      "likes": 20,
+      "comments": [
+        "Well done"
+      ]
+    }
+  ],
+  "friends": [
+    2,
+    3
+  ],
+  "skills": [
+    "JavaScript",
+    "React",
+    "Node.js"
+  ],
+  "isActive": true
+}
+
+
+{
+  "_id": 3,
+  "name": "Bob Williams",
+  "age": 24,
+  "city": "New York",
+  "gender": "Male",
+  "posts": [
+    {
+      "title": "Post 5",
+      "likes": 18,
+      "comments": [
+        "Keep it up"
+      ]
+    },
+    {
+      "title": "Post 6",
+      "likes": 22,
+      "comments": [
+        "Awesome"
+      ]
+    }
+  ],
+  "friends": [
+    1,
+    2
+  ],
+  "skills": [
+    "Java",
+    "Spring Boot",
+    "JavaScript"
+  ],
+  "isActive": false
+}
+
+--------------------------------------------------------------------------------------------------
+20. Add a "postCount" field representing the total number of posts for each user.
+
+[
+  {
+    $project: {
+      "name" :  1,
+      "postCount" : {$size: "$posts"}
+    }
+  }
+]
+
+
+{
+  "_id": 2,
+  "name": "Alice Johnson",
+  "postCount": 2
+}
+{
+  "_id": 1,
+  "name": "John Doe",
+  "postCount": 2
+}
+{
+  "_id": 8,
+  "name": "Hannah Robinson",
+  "postCount": 2
+}
+{
+  "_id": 9,
+  "name": "Isaac Moore",
+  "postCount": 2
+}
+{
+  "_id": 4,
+  "name": "Diana Brown",
+  "postCount": 2
+}
+{
+  "_id": 3,
+  "name": "Bob Williams",
+  "postCount": 2
+}
+{
+  "_id": 6,
+  "name": "Fiona Miller",
+  "postCount": 2
+}
+{
+  "_id": 5,
+  "name": "Elijah Wilson",
+  "postCount": 2
+}
+{
+  "_id": 7,
+  "name": "George Taylor",
+  "postCount": 2
+}
+{
+  "_id": 10,
+  "name": "Jasmine Hill",
+  "postCount": 2
+}
+
+
+[
+  {
+    $addFields: {
+      "PostCount": {
+        $size : "$posts"
+      }
+    }
+  },
+  {
+    $project: {
+      name : 1,
+      PostCount : 1
+    }
+  }
+]
+
+{
+  "_id": 2,
+  "name": "Alice Johnson",
+  "postCount": 2
+}
+{
+  "_id": 1,
+  "name": "John Doe",
+  "postCount": 2
+}
+{
+  "_id": 8,
+  "name": "Hannah Robinson",
+  "postCount": 2
+}
+{
+  "_id": 9,
+  "name": "Isaac Moore",
+  "postCount": 2
+}
+{
+  "_id": 4,
+  "name": "Diana Brown",
+  "postCount": 2
+}
+{
+  "_id": 3,
+  "name": "Bob Williams",
+  "postCount": 2
+}
+{
+  "_id": 6,
+  "name": "Fiona Miller",
+  "postCount": 2
+}
+{
+  "_id": 5,
+  "name": "Elijah Wilson",
+  "postCount": 2
+}
+{
+  "_id": 7,
+  "name": "George Taylor",
+  "postCount": 2
+}
+{
+  "_id": 10,
+  "name": "Jasmine Hill",
+  "postCount": 2
+}
+--------------------------------------------------------------------------------------------------
+21. Add a "friendNames" field with the names of friends for each user.
+
+[
+  {
+    $lookup: {
+      from: "users",
+      localField: "friends",
+      foreignField: "_id",
+      as: "result"
+    }
+  },
+  {
+    $project: {
+      name : 1,
+      "result.name" : 1
+    }
+  }
+]
+
+{
+  "_id": 1,
+  "name": "John Doe",
+  "result": [
+    {
+      "name": "Alice Johnson"
+    },
+    {
+      "name": "Bob Williams"
+    }
+  ]
+}
+
+{
+  "_id": 2,
+  "name": "Alice Johnson",
+  "result": [
+    {
+      "name": "Bob Williams"
+    },
+    {
+      "name": "John Doe"
+    }
+  ]
+}
+% as it is baki badha ma friendNames field add thay jase..
+
+--------------------------------------------------------------------------------------------------
+22. Display posts data that have more than 1 comments.
+
+[
+  {
+    $unwind: {
+      path: "$posts"
+    }
+  },
+  {
+    $project: {
+      "posts" : 1,
+      "CountComment" : {$size : "$posts.comments"}
+    }
+  },
+  {
+    $match: {
+      "CountComment" : {$gt : 1}
+    }
+  }
+]
+
+
+{
+  "_id": 2,
+  "posts": {
+    "title": "Post 3",
+    "likes": 10,
+    "comments": [
+      "Nice!",
+      "Awesome"
+    ]
+  },
+  "CountComment": 2
+}
+{
+  "_id": 1,
+  "posts": {
+    "title": "Post 1",
+    "likes": 15,
+    "comments": [
+      "Great post!",
+      "Interesting"
+    ]
+  },
+  "CountComment": 2
+}
+{
+  "_id": 8,
+  "posts": {
+    "title": "Post 15",
+    "likes": 15,
+    "comments": [
+      "Nice!",
+      "Interesting"
+    ]
+  },
+  "CountComment": 2
+}
+{
+  "_id": 9,
+  "posts": {
+    "title": "Post 17",
+    "likes": 10,
+    "comments": [
+      "Nice!",
+      "Impressive"
+    ]
+  },
+  "CountComment": 2
+}
+{
+  "_id": 4,
+  "posts": {
+    "title": "Post 8",
+    "likes": 30,
+    "comments": [
+      "Well done",
+      "Great post!"
+    ]
+  },
+  "CountComment": 2
+}
+{
+  "_id": 10,
+  "posts": {
+    "title": "Post 19",
+    "likes": 18,
+    "comments": [
+      "Keep it up",
+      "Awesome"
+    ]
+  },
+  "CountComment": 2
+}
+{
+  "_id": 11,
+  "posts": {
+    "title": "Post 1",
+    "likes": 15,
+    "comments": [
+      "Great post!",
+      "Interesting"
+    ]
+  },
+  "CountComment": 2
+}
+{
+  "_id": 12,
+  "posts": {
+    "title": "Post 1",
+    "likes": 15,
+    "comments": [
+      "Great post!",
+      "Interesting"
+    ]
+  },
+  "CountComment": 2
+}
+
+
+[
+  {
+    $unwind : "$posts"
+  },
+  {
+    $addFields: {
+      "UserComment": {
+        $size : "$posts.comments"
+      }
+    }
+  },
+  {
+    $match: {
+      UserComment : {
+        $gt : 1
+      }
+    }
+  },
+  {
+    $project: {
+      name : 1,
+      UserComment : 1
+    }
+  }
+]
+
+{
+  "_id": 1,
+  "name": "John Doe",
+  "UserComment": 2
+}
+{
+  "_id": 2,
+  "name": "Alice Johnson",
+  "UserComment": 2
+}
+{
+  "_id": 4,
+  "name": "Diana Brown",
+  "UserComment": 2
+}
+{
+  "_id": 8,
+  "name": "Hannah Robinson",
+  "UserComment": 2
+}
+9 10 11 12 badha ma 1 karta vadhare comment che
+--------------------------------------------------------------------------------------------------
