@@ -9,6 +9,7 @@ import { categoriesReducer } from "./category.reducer";
 import subCategorySlice from "../slice/subCategory.slice";
 import { productsReducer } from "./product.reduces";
 import { variantReducer } from "./variant.reducer";
+import { salespeopleReducer } from "./salespeople.reducer";
 
 export const RootReducer = combineReducers({
     facilites : FacilitesReducer,
@@ -20,5 +21,6 @@ export const RootReducer = combineReducers({
     coupon : coupanSlice,
     categories: categoriesReducer,
     subcategories : subCategorySlice,
-    variant : variantReducer
+    variant : variantReducer,
+    salespeople: salespeopleReducer
 })

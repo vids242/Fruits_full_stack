@@ -4,7 +4,7 @@ import {
     Backdrop, CircularProgress, FormControl, InputLabel, MenuItem, Select, IconButton
 } from '@mui/material';
 import { useFormik } from 'formik';
-import { object, string, boolean } from 'yup';
+import { object, string, boolean, mixed } from 'yup';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { DataGrid } from '@mui/x-data-grid';

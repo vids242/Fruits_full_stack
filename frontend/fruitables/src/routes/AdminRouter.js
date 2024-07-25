@@ -10,6 +10,7 @@ import Coupan from '../admin/container/Coupan/Coupan';
 import Contact from '../admin/container/Contact/Contact';
 import SubCategory from '../admin/container/Subcategory/SubCategory';
 import Variants from '../admin/container/Variant/Variants';
+import Salespeople from '../admin/container/Salespeople/Salespeople';
 
 
 function AdminRouter(props) {
@@ -26,6 +27,7 @@ function AdminRouter(props) {
                     <Route exact path="/coupan" element={<Coupan />} />
                     <Route exact path="/contact" element={<Contact />} />
                     <Route expat  path = "/variant" element={<Variants/>}/>
+                    <Route expat  path = "/salespeople" element={<Salespeople/>}/>
                 </Routes>
             </Layout>
         </div>

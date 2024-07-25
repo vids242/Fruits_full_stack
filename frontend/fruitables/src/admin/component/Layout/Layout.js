@@ -100,7 +100,8 @@ let adminlink = [
   { title: "Facilites", icon: <WarehouseIcon />, to: "/admin/facilites" },
   { title: "Counter", icon: <AppleIcon />, to: "/admin/counter" },
   { title: "Coupan", icon: <ReviewsIcon />, to: "/admin/coupan" },
-  { title: "Contact", icon: <CategoryIcon />, to: "/admin/contact" }
+  { title: "Contact", icon: <CategoryIcon />, to: "/admin/contact" },
+  { title: "Salespeople", icon: <CategoryIcon />, to: "/admin/salespeople" },
 ]
 
 export default function Layout({ children }) {
