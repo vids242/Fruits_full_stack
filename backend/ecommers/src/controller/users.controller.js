@@ -149,15 +149,15 @@ const generateNewTokens = async (req, res) => {
     try {
 
         req.cookies.refreshToken
-        console.log( req.cookies.refreshToken);
-        if (! req.cookies.refreshToken) {
+        console.log(req.cookies.refreshToken);
+        if (!req.cookies.refreshToken) {
             return res.status(401).json({
                 success: false,
                 message: "unauthorized"
             })
         }
 
-        const verifyToken = await jwt.verify( req.cookies.refreshToken, "eheeded")
+        const verifyToken = await jwt.verify(req.cookies.refreshToken, "eheeded")
         console.log(verifyToken);
 
         if (!verifyToken) {
@@ -212,8 +212,45 @@ const generateNewTokens = async (req, res) => {
         })
     }
 }
+
+const logout = async (req, res) => {
+    try {
+        console.log(req.body._id);
+
+        const user = await Users.findByIdAndUpdate(
+            req.body._id,
+            {
+                $unset: { refreshToken: 1 }
+            },
+            {
+                new: true
+            }
+        )
+
+        console.log(user);
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "user not logout"
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "User Logged Out"
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "internal server error" + error.message
+        })
+    }
+
+}
 module.exports = {
     ragister,
     login,
-    generateNewTokens
+    generateNewTokens,
+    logout
 }

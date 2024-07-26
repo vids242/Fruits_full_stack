@@ -18,4 +18,9 @@ routes.post('/newtoken',
     usersController.generateNewTokens
 )
 
+
+routes.post('/logout',
+    usersController.logout
+)
+
 module.exports = routes;
