@@ -38,7 +38,7 @@ const GoogleProvider = async () => {
 
         passport.deserializeUser(async function (id, done) {
             await Users.findById(id, function (err, user) {
-                console.log("deserializeUser");
+                console.log("deserializeUserok");
                 done(err, user);
             });
         });
