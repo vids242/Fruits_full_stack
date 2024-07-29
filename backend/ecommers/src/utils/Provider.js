@@ -53,8 +53,8 @@ const FacebookProvider = async () => {
     console.log("Initializing FacebookProvider...");
     try {
         passport.use(new FacebookStrategy({
-            // clientID: "804702431845210",
-            // clientSecret: "ee7f5721b0cdaa1bb85393c0add002c4",
+            clientID: "804702431845210",
+            clientSecret: "ee7f5721b0cdaa1bb85393c0add002c4",
             callbackURL: "http://localhost:8000/api/v1/users/facebook/callback",
             profileFields: ['id', 'displayName', 'emails'] // Specify which fields to return
         },
