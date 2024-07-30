@@ -1,6 +1,7 @@
 const Users = require("../models/users.models");
 const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
+const sendMail = require("../utils/nodemailer");
 
 const createToken = async (id) => {
     try {
@@ -74,12 +75,17 @@ const ragister = async (req, res) => {
                 message: "internal server error" + error.message
             })
         }
-
+         //after ragistartion is complet mail sended
+        await  sendMail(email)
+        
         res.status(201).json({
             success: true,
             message: "ragister succesfully",
             data: userDataF
         })
+
+       
+       
 
     } catch (error) {
         return res.status(500).json({
