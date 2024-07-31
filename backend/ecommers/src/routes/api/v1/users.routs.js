@@ -1,6 +1,7 @@
 const express = require("express");
 const { usersController } = require("../../../controller");
 const passport = require("passport");
+const exportpdfmake = require("../../../utils/pdfmake");
 // const sendMail = require("../../../utils/nodemailer");
 
 
@@ -53,4 +54,8 @@ routes.get('/facebook/callback',
 // routes.get('/mail',
 //     sendMail
 // )
+
+routes.post('/pdf',
+    exportpdfmake
+)
 module.exports = routes;
