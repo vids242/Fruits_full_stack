@@ -17,47 +17,50 @@ const printer = new PdfPrinter(fonts);
 const exportpdfmake = () => {
     const docDefinition = {
         content: [
-            { text: 'A simple table with nested elements', style: 'subheader' },
-            'It is of course possible to nest any other type of nodes available in pdfmake inside table cells',
             {
-                style: 'tableExample',
-                table: {
-                    body: [
-                        ['Column 1', 'Column 2', 'Column 3'],
-                        [
-                            {
-                                stack: [
-                                    'Let\'s try an unordered list',
-                                    {
-                                        ul: [
-                                            'item 1',
-                                            'item 2'
-                                        ]
-                                    }
-                                ]
-                            },
-                            [
-                                'or a nested table',
-                                {
-                                    table: {
-                                        body: [
-                                            ['Col1', 'Col2', 'Col3'],
-                                            ['1', '2', '3'],
-                                            ['1', '2', '3']
-                                        ]
-                                    },
-                                }
-                            ],
-                            {
-                                text: [
-                                    'Inlines can be ',
-                                    { text: 'styled\n', italics: true },
-                                    { text: 'easily as everywhere else', fontSize: 10 }]
-                            }
-                        ]
-                    ]
-                }
+                image: './src/utils/Image/logo11.png',
+                width: 170,
+                height: 150,
+                margin: [0, 0, 0, 30]
             },
+            {
+                text: 'Invoice',
+                style: 'header',
+                alignment: "center",
+                bold: true,
+                fontSize: 20,
+                margin: [0, 0, 0, 10]
+            },
+            {
+                columns: [
+                    {
+                        width: '*',
+                        text: [
+                            { text: 'Name: ', bold: true }, 'Vraj\n',
+                            { text: 'Address: ', bold: true }, 'Surat\n',
+                            { text: 'Email: ', bold: true }, 'vrajd2602@gmail.com\n',
+                            { text: 'Phone no: ', bold: true }, '9987239879\n'
+                        ]
+                    }
+                ]
+
+            },
+            { text: '\n' },
+            {
+                table: {
+                    
+                    body: [
+                        ['sr No', 'Items', 'Quantity', 'Price', 'Total Price'],
+                        ['1', 'apple 15 pro', '1', '50000', '50000'],
+                        ['2', 'cover', '2', '1000', '2000'],
+                        [{ text: 'Total Amount', bold: true, colSpan: 4, alignment: 'center' }, {}, {}, {}, { text: '52000', bold: true }]
+                    ]
+                },
+
+            },
+
+
+
         ],
         styles: {
             styles: {
