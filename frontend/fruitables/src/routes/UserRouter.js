@@ -12,6 +12,7 @@ import Cart from '../user/container/Cart/Cart';
 import { ThemeContext } from '../Context/ThemeContext';
 import Ragister from '../user/container/Ragister/Ragister';
 import Login from '../user/container/Login/Login';
+import Chat from '../user/container/Chat/Chat';
 
 function UserRouter(props) {
     const theme = useContext(ThemeContext)
@@ -25,6 +26,7 @@ function UserRouter(props) {
                     <Route exact path="/Shop" element={<Shop />} />
                     <Route exact path="/Shopdetails/:id" element={<ShopDetails />} />
                 </Route>
+                <Route exact path="/chat" element={<Chat />} />
                 <Route exact path="/cart" element={<Cart />} />
                 <Route path='/contact' element={<Contact />} />
                 <Route path='/review' element={<Review />} />

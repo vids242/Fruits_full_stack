@@ -67,7 +67,7 @@ export const deleteVariant = (_id) => async (dispatch) => {
 export const editVariant = (data) => async (dispatch) => {
     try {
         // dispatch(loadingProducts())
-        console.log(data);
+        // console.log(data);
         const response = await axios.put(variantURL + 'update-variant/' + data._id, data, {
             headers: {
                 'Content-Type': 'application/json'

@@ -62,22 +62,22 @@ const subcategorySlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(getSubData.fulfilled, (state, action) => {
-            console.log(action);
+            // console.log(action);
             state.subcategories = action.payload.data;
         })
         
         builder.addCase(handleAdd.fulfilled, (state, action) => {
-            console.log(action);
+            // console.log(action);
             state.subcategories = state.subcategories.concat(action.payload.data)
         })
 
         builder.addCase(handledelete.fulfilled, (state, action) => {
-            console.log(action);
+            // console.log(action);
             state.subcategories = state.subcategories.filter((v) => v._id !== action.payload)
         })
 
         builder.addCase(handleUpdateData.fulfilled, (state, action) => {
-            console.log(action.payload);
+            // console.log(action.payload);
             state.subcategories = state.subcategories.map((v) => {
                 if (v._id === action.payload.data._id) {
                     return action.payload.data

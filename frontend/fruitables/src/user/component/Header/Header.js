@@ -81,6 +81,7 @@ function Header(props) {
                             <div className={`navbar-nav mx-auto ${themeContext.theme}`}>
                                 <NavLink to="/" className="nav-item nav-link active">Home</NavLink>
                                 <NavLink to="/Shop" className="nav-item nav-link">Shop</NavLink>
+                                <NavLink to="/chat" className="nav-item nav-link">Chat</NavLink>
                                 <a href="shop-detail.html" className="nav-item nav-link">Shop Detail</a>
                                 <div className="nav-item dropdown">
                                     <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>

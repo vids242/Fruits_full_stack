@@ -5,7 +5,7 @@ export const getData = () => async (dispatch) => {
     try {
         const response = await fetch("http://localhost:8000/api/v1/categories/categories-list");
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         dispatch({type: GET_CATEGORY, payload: data.data});
 
     } catch (error) {

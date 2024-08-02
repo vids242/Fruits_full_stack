@@ -31,7 +31,7 @@ export const deletesalespeople = (snum) => async (dispatch) => {
 };
 
 export const editsalespeople = (data) => async (dispatch) => {
-    console.log(data);
+    // console.log(data);
     try {
         await axios.put(`http://localhost:8000/api/v1/salespeople/update-salespeople/${data.snum}`, data, {
             headers: {
