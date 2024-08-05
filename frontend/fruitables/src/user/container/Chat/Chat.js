@@ -1,7 +1,12 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { io } from 'socket.io-client';
 
 function Chat(props) {
+    const [rec, setReceiver] = useState('');
+    const [msg, setMsg] = useState('');
+    const [allMsg, setAllMsg] = useState([]);
+    const [group, setGroup] = useState('');
+
     const socket = useMemo(() => io("http://localhost:8080"));
 
     useEffect(() => {
@@ -11,21 +16,23 @@ function Chat(props) {
 
         socket.on("welcome", (msg) => { console.log(msg) })
         socket.on("greeting", (msg) => { console.log(msg) })
-    }, [])
-    //give value from form
-    
+        socket.on('receive-message', (msg) => { setAllMsg(prev => [...prev, msg]) })
+    }, [group])
+
 
     const hendalsubmit = (event) => {
         event.preventDefault()
-
-        const id = document.getElementById("id").value
-        const message = document.getElementById("message").value
-
-        console.log(id,message);
-
-        
+        socket.emit('message', {
+            receiver: rec,
+            message: msg
+        });
     }
 
+    const hendalGroupsubmit = (e) => {
+        e.preventDefault();
+
+        socket.emit('join-group', group)
+    }
     return (
         <>
             <div className="container-fluid page-header py-5">
@@ -37,13 +44,37 @@ function Chat(props) {
                 </ol>
             </div>
             <br></br><br></br>
+            {
+                allMsg.map((v) => (
+                    <p>{v}</p>
+                ))
+            }
+            <form onSubmit={hendalGroupsubmit}>
+                <input
+                    type="text"
+                    id='rec'
+                    placeholder="Enter group"
+                    onChange={(e) => setGroup(e.target.value)}
+                />
+                <input type="submit" />
+            </form>
+            <br></br>
             <form onSubmit={hendalsubmit}>
-                <input type="text" name="id" id='id' placeholder="Enter id"/>
-                <input type="text" name="message" id='message' placeholder="Type a message"/>
-                <button type="submit">Send</button>
+                <input
+                    type="text"
+                    id='rec'
+                    placeholder="Enter receiver id"
+                    onChange={(e) => setReceiver(e.target.value)}
+                />
+                <input
+                    type="text"
+                    id='msg'
+                    placeholder="Type a message"
+                    onChange={(e) => setMsg(e.target.value)}
+                />
+                <input type="submit" />
             </form>
         </>
-
     );
 }
 
