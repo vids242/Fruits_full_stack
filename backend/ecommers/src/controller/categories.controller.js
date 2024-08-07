@@ -1,22 +1,42 @@
 const Categories = require("../models/categories.models")
 
 const listcategories = async (req, res) => {
-    // console.log("category", res.user);
+    console.log("category", req.query.page, req.query.pageSize);
     try {
+        const page = parseInt(req.query.page);
+        const pageSize = parseInt(req.query.pageSize);
+
+        if (page <= 0 || pageSize <= 0) {
+            res.status(400).json({
+                success: false,
+                message: "page or pageSize must be greter then zero"
+            })
+        }
+
         const categories = await Categories.find();
 
         if (!categories || categories.length === 0) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: "categories not found"
             })
         }
 
+        let startIndex = 0, endIndex = 0, pagenationData = [];
+
+        if (page > 0 || pageSize > 0) {  // page = 1 pageSize = 2
+            startIndex = (page - 1) * pageSize // (1-1)*2
+            endIndex = startIndex + pageSize // 0 + 2 = 2
+            pagenationData = categories.slice(startIndex, endIndex)
+        }
+
         res.status(200).json({
             success: true,
+            totalData: categories.length,
             message: "categories fatech succesfully",
-            data: categories
+            data: pagenationData
         })
+
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -26,30 +46,30 @@ const listcategories = async (req, res) => {
 }
 
 const addcategories = async (req, res) => {
-    try {
+    console.log("add-category", req.body);
 
+    // try {
+    //     const category = await Categories.create(req.body)
+    //     // console.log(category);
 
-        const category = await Categories.create(req.body)
-        // console.log(category);
+    //     if (!category) {
+    //         res.status(400).json({
+    //             success: false,
+    //             message: "Category not Created"
+    //         })
+    //     }
 
-        if (!category) {
-            res.status(400).json({
-                success: false,
-                message: "Category not Created"
-            })
-        }
-
-        res.status(201).json({
-            success: true,
-            message: "Category Created succesfully",
-            data: category
-        })
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "internal server error" + error.message
-        })
-    }
+    //     res.status(201).json({
+    //         success: true,
+    //         message: "Category Created succesfully",
+    //         data: category
+    //     })
+    // } catch (error) {
+    //     res.status(500).json({
+    //         success: false,
+    //         message: "internal server error" + error.message
+    //     })
+    // }
 }
 
 const deletecategories = async (req, res) => {
@@ -79,11 +99,11 @@ const deletecategories = async (req, res) => {
     }
 }
 
-const updatecategories = async (req,res) => {
-//    console.log("dhuwhfhf",req.params.category_id,req.body);
+const updatecategories = async (req, res) => {
+    //    console.log("dhuwhfhf",req.params.category_id,req.body);
     try {
-        const category = await Categories.findByIdAndUpdate(req.params.category_id,req.body,{new:true,runValidators:true})
-       
+        const category = await Categories.findByIdAndUpdate(req.params.category_id, req.body, { new: true, runValidators: true })
+
         if (!category) {
             res.status(400).json({
                 success: false,
@@ -97,7 +117,7 @@ const updatecategories = async (req,res) => {
             data: category
         })
 
-    } catch (error) {   
+    } catch (error) {
         res.status(500).json({
             success: false,
             message: "internal server error" + error.message
@@ -105,27 +125,27 @@ const updatecategories = async (req,res) => {
     }
 }
 
-const countActive = async (req,res) => {
+const countActive = async (req, res) => {
     const categories = await Categories.aggregate([
         {
-          $match: {
-            "isActive" : true
-          }
+            $match: {
+                "isActive": true
+            }
         },
         {
-          $count: "NoOfCategories"
+            $count: "NoOfCategories"
         }
-        
-      ])
-      res.status(200).json({
+
+    ])
+    res.status(200).json({
         success: true,
         message: "Category get  succesfully",
         data: categories
     })
-      console.log(categories);
+    console.log(categories);
 }
 
-const mostproducts = async (req,res) => {
+const mostproducts = async (req, res) => {
     const categories = await Categories.aggregate([
 
         {
@@ -165,13 +185,13 @@ const mostproducts = async (req,res) => {
         }
 
     ])
-      res.status(200).json({
+    res.status(200).json({
         success: true,
         message: "Category get  succesfully",
         data: categories
     })
-      console.log(categories);
-} 
+    console.log(categories);
+}
 
 const getcategory = async (req, res) => {
     try {
@@ -228,7 +248,7 @@ const totalProducts = async (req, res) => {
                 "TotalProduct": {
                     $sum: 1
                 },
-                "product_name" : {$push : "$product.name"}
+                "product_name": { $push: "$product.name" }
             }
         }
     ])
@@ -267,32 +287,32 @@ const countSubcategories = async (req, res) => {
     const categories = await Categories.aggregate([
         {
             $lookup: {
-              from: "subcategories",
-              localField: "_id",
-              foreignField: "category_id",
-              as: "subcategory"
+                from: "subcategories",
+                localField: "_id",
+                foreignField: "category_id",
+                as: "subcategory"
             }
-          },
-          {
+        },
+        {
             $match: {
-              "subcategory" : {$ne : []}
+                "subcategory": { $ne: [] }
             }
-          },
-          {
+        },
+        {
             $unwind: {
-              path: "$subcategory"
+                path: "$subcategory"
             }
-          },
-          {
+        },
+        {
             $group: {
-              _id: "$_id",
-              "category_name" : {$first : "$name"},
-              "CountSubcategories": {
-                $sum: 1
-              },
-              "subcategory_name" : {$push : "$subcategory.name"}
+                _id: "$_id",
+                "category_name": { $first: "$name" },
+                "CountSubcategories": {
+                    $sum: 1
+                },
+                "subcategory_name": { $push: "$subcategory.name" }
             }
-          }
+        }
     ])
 
     res.status(200).json({
@@ -309,18 +329,18 @@ const specificCategory = async (req, res) => {
     const categories = await Categories.aggregate([
         {
             $lookup: {
-              from: "subcategories",
-              localField: "_id",
-              foreignField: "category_id",
-              as: "subcategory"
+                from: "subcategories",
+                localField: "_id",
+                foreignField: "category_id",
+                as: "subcategory"
             }
-          },
-          {
+        },
+        {
             $project: {
-              "name" : 1,
-              "subcategory" : 1
+                "name": 1,
+                "subcategory": 1
             }
-          }
+        }
     ])
 
     res.status(200).json({

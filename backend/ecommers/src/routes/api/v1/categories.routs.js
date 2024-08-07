@@ -1,5 +1,7 @@
 const express = require("express");
 const { categoriescontroller } = require("../../../controller");
+const validation = require("../../../middelware/validation");
+const { categoryvalidation } = require("../../../validation");
 // const auth = require("../../../middelware/auth");
 
 const routes = express.Router();
@@ -19,7 +21,8 @@ routes.get('/most-products',
 )
 
 routes.get(
-    '/get-categories/:category_id',
+    '/get-categories',
+    validation(categoryvalidation.getCategory),
     categoriescontroller.getcategory
 )
 
@@ -44,14 +47,17 @@ routes.get(
 )
 
 routes.post('/categories-add',
+    validation(categoryvalidation.addCategory),
     categoriescontroller.addcategories
 )
 
 routes.put('/categories-update/:category_id',
+    validation(categoryvalidation.updateCategory),
     categoriescontroller.updatecategories
 )
 
 routes.delete('/categories-delete/:category_id',
+    validation(categoryvalidation.deleteCategory),
     categoriescontroller.deletecategories
 )
 
