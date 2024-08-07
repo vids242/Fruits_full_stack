@@ -2,6 +2,7 @@ const express = require("express");
 const { usersController } = require("../../../controller");
 const passport = require("passport");
 const exportpdfmake = require("../../../utils/pdfmake");
+const { sendOTP, verifyOTP } = require("../../../utils/twilio");
 // const sendMail = require("../../../utils/nodemailer");
 
 
@@ -12,6 +13,15 @@ routes.post('/ragister',
     usersController.ragister
 )
 
+routes.post('/ragisterOTP',
+    sendOTP,
+    usersController.ragisterOTP
+)
+
+routes.get('/verifyOTP',
+    verifyOTP,
+    usersController.verifyOTP
+)
 
 routes.post('/login',
     usersController.login

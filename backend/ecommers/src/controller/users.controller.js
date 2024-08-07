@@ -75,17 +75,17 @@ const ragister = async (req, res) => {
                 message: "internal server error" + error.message
             })
         }
-         //after ragistartion is complet mail sended
-        await  sendMail(email)
-        
+        //after ragistartion is complet mail sended
+        await sendMail(email)
+
         res.status(201).json({
             success: true,
             message: "ragister succesfully",
             data: userDataF
         })
 
-       
-       
+
+
 
     } catch (error) {
         return res.status(500).json({
@@ -95,6 +95,19 @@ const ragister = async (req, res) => {
     }
 }
 
+const ragisterOTP = async (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "otp ragister successfully ."
+    })
+}
+
+const verifyOTP =async (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "otp verify successfully ."
+    })
+}
 const login = async (req, res) => {
     try {
         const { email, password } = req.body
@@ -258,5 +271,7 @@ module.exports = {
     ragister,
     login,
     generateNewTokens,
-    logout
+    logout,
+    ragisterOTP,
+    verifyOTP
 }
