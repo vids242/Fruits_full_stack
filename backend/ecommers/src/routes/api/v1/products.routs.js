@@ -45,6 +45,11 @@ routes.get(
     productsController.countCategories
 )
 
+routes.get(
+    '/search',
+    productsController.searchData
+)
+
 routes.post(
     '/add-products',
     upload.single("product_img"),

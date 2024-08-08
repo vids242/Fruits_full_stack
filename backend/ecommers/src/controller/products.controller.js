@@ -402,6 +402,112 @@ const countCategories = async (req, res) => {
 
 }
 
+const searchData = async (req, res) => {
+    try {
+        const { sortOrder, rating, max, min, category, page, limit } = req.query
+       
+
+        
+        const matchPip = {}
+
+        if (rating) {
+            matchPip['avgRating'] = { "$gte":  parseInt(rating) }
+        }
+        if (category) {
+            matchPip['category_id'] = parseInt(category)
+        }
+
+        matchPip['variant.attributes.Price'] = {}
+
+        if (min != undefined) {
+            matchPip['variant.attributes.Price'].$gt = parseInt(min)
+        }
+
+        if (max != undefined) {
+            matchPip['variant.attributes.Price'].$lte = parseInt(max)
+        }
+
+        // console.log(matchPip);
+
+        const pipline = [
+            {
+                $lookup: {
+                    from: "reviews",
+                    localField: "_id",
+                    foreignField: "product_id",
+                    as: "review"
+                }
+            },
+            {
+                $lookup: {
+                    from: "variants",
+                    localField: "_id",
+                    foreignField: "product_id",
+                    as: "variant"
+                }
+            },
+            {
+                $addFields: {
+                    avgRating: {
+                        $avg: "$review.rating"
+                    }
+                }
+            },
+            {
+                $unwind: {
+                    path: "$variant"
+                }
+            },
+            {
+                $match: matchPip
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    name: {
+                        $first: "$name"
+                    },
+                    variant: {
+                        $push: "$variant"
+                    },
+                    review: {
+                        $push: "$review"
+                    }
+                }
+            },
+            {
+                $sort: {
+                    name: sortOrder === 'asc' ? 1 : -1
+                }
+            }
+           
+        ]
+
+        if (parseInt(page) > 0 && parseInt(limit) > 0) {
+            pipline.push({ $skip: (parseInt(page) - 1) * parseInt(limit) })
+            pipline.push({ $limit:  parseInt(limit) })
+        }
+
+        const data = await Products.aggregate(pipline)
+      
+        // console.log(JSON.stringify(data));
+
+
+        res.status(400).json({
+            success : true,
+            message : "Product data fected",
+            data : data
+        })
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({
+            success : false,
+            message : "Inetrnal server error" + error
+        })
+    }
+}
+
 module.exports = {
     listproducts,
     getproducts,
@@ -413,5 +519,6 @@ module.exports = {
     productsBySubcategory,
     topRate,
     newArrivals,
-    countCategories
+    countCategories,
+    searchData
 }
