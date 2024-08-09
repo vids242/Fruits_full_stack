@@ -1,7 +1,7 @@
 const sendOTP = (req, res, next) => {
     try {
-        const accountSid = 'ACf3820f592c4378fda13180749298649c';
-        const authToken = '71534b99fb888c97c9f97b6706625735';
+        const accountSid = process.env.TWILIO_ACCOUNT_SID;
+        const authToken = process.env.TWILIO_AUTH_TOKEN;
         const client = require('twilio')(accountSid, authToken);
 
         const otp = Math.floor(1000 + Math.random() * 9000);

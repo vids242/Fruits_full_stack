@@ -3,7 +3,7 @@ const { usersController } = require("../../../controller");
 const passport = require("passport");
 const exportpdfmake = require("../../../utils/pdfmake");
 const { sendOTP, verifyOTP } = require("../../../utils/twilio");
-// const sendMail = require("../../../utils/nodemailer");
+const sendMail = require("../../../utils/nodemailer");
 
 
 const routes = express.Router();
@@ -36,18 +36,18 @@ routes.post('/logout',
     usersController.logout
 )
 
-// routes.get(
-//     '/googleLogin',
-//     passport.authenticate('google', { scope: ['profile', 'email'] }));
+routes.get(
+    '/googleLogin',
+    passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-// routes.get(
-//     '/google/callback',
-//     passport.authenticate('google', { failureRedirect: '/login' }),
-//     function (req, res) {
-//         console.log("login sucessfully");
-//         // Successful authentication, redirect home.
-//         res.redirect('/');
-// });
+routes.get(
+    '/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    function (req, res) {
+        console.log("login sucessfully");
+        // Successful authentication, redirect home.
+        res.redirect('/');
+});
 
 routes.get('/facebookLogin',
     passport.authenticate('facebook', { scope: ["public_profile", "email"] })
@@ -61,9 +61,9 @@ routes.get('/facebook/callback',
         res.redirect('/');
 });
 
-// routes.get('/mail',
-//     sendMail
-// )
+routes.get('/mail',
+    sendMail
+)
 
 routes.post('/pdf',
     exportpdfmake

@@ -405,13 +405,11 @@ const countCategories = async (req, res) => {
 const searchData = async (req, res) => {
     try {
         const { sortOrder, rating, max, min, category, page, limit } = req.query
-       
 
-        
         const matchPip = {}
 
         if (rating) {
-            matchPip['avgRating'] = { "$gte":  parseInt(rating) }
+            matchPip['avgRating'] = { "$gte": parseInt(rating) }
         }
         if (category) {
             matchPip['category_id'] = parseInt(category)
@@ -480,30 +478,31 @@ const searchData = async (req, res) => {
                     name: sortOrder === 'asc' ? 1 : -1
                 }
             }
-           
+
         ]
 
         if (parseInt(page) > 0 && parseInt(limit) > 0) {
             pipline.push({ $skip: (parseInt(page) - 1) * parseInt(limit) })
-            pipline.push({ $limit:  parseInt(limit) })
+            pipline.push({ $limit: parseInt(limit) })
         }
-
+        console.log(JSON.stringify(pipline));
+        
         const data = await Products.aggregate(pipline)
-      
+
         // console.log(JSON.stringify(data));
 
 
         res.status(400).json({
-            success : true,
-            message : "Product data fected",
-            data : data
+            success: true,
+            message: "Product data fected",
+            data: data
         })
 
     } catch (error) {
         console.log(error.message);
         res.status(500).json({
-            success : false,
-            message : "Inetrnal server error" + error
+            success: false,
+            message: "Inetrnal server error" + error
         })
     }
 }

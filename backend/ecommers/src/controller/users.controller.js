@@ -18,16 +18,16 @@ const createToken = async (id) => {
             {
                 _id: user._id,
                 role: user.role,
-                expiresIn: '1 h'
+                expiresIn: process.env.ACCESSTOKEN_EXPIREIN
             },
-            "vi242@242",
-            { expiresIn: '1 h' }
+            process.env.ACCESSTOKEN,
+            { expiresIn: process.env.ACCESSTOKEN_EXPIREIN }
         )
 
         const refreshToken = await jwt.sign(
             { _id: id },
-            "eheeded",
-            { expiresIn: '7 days' }
+            process.env.REFRESHTOKEN,
+            { expiresIn: process.env.REFRESHTOKEN_EXPIREIN }
         )
 
         user.refreshToken = refreshToken
@@ -102,7 +102,7 @@ const ragisterOTP = async (req, res) => {
     })
 }
 
-const verifyOTP =async (req, res) => {
+const verifyOTP = async (req, res) => {
     res.status(200).json({
         success: true,
         message: "otp verify successfully ."
@@ -176,7 +176,7 @@ const generateNewTokens = async (req, res) => {
             })
         }
 
-        const verifyToken = await jwt.verify(req.cookies.refreshToken, "eheeded")
+        const verifyToken = await jwt.verify(req.cookies.refreshToken, process.env.CREATETOKEN_REFRESHTOKEN)
         console.log(verifyToken);
 
         if (!verifyToken) {
@@ -267,6 +267,7 @@ const logout = async (req, res) => {
     }
 
 }
+
 module.exports = {
     ragister,
     login,
