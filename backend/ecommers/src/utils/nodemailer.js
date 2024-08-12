@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const exportpdfmake = require('./pdfmake');
 
 const sendMail = async (receiverEmail) => {
-    console.log(receiverEmail);
+    // console.log(receiverEmail);
     const transporter = await nodemailer.createTransport({
         service: "gmail",
         host: "smtp.gmail.com",
@@ -35,7 +35,7 @@ const sendMail = async (receiverEmail) => {
 
     await transporter.sendMail(mailOptions, (error, emailResponse) => {
         if (error) throw error;
-        console.log("Email sent successfully!");
+        // console.log("Email sent successfully!");
     });
 };
 

@@ -8,8 +8,12 @@ const cookieParser = require('cookie-parser')
 const passport = require("passport");
 const { GoogleProvider, FacebookProvider } = require("./utils/Provider");
 const connectChat = require("./utils/soketIO");
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
 
 const app = express();
+const swaggerDocument = YAML.load('./src/api.yaml');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cookieParser())
 app.use(cors())
 app.use(express.json())

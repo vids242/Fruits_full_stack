@@ -21,6 +21,9 @@ const UsersSchema = new mongoose.Schema(
             trim : true,
             required : true,
         },
+        avtar :{ 
+            type : String
+        },
         refreshToken : {
             type : String,
         },

@@ -2,13 +2,13 @@ const express = require("express");
 const { categoriescontroller } = require("../../../controller");
 const validation = require("../../../middelware/validation");
 const { categoryvalidation } = require("../../../validation");
-// const auth = require("../../../middelware/auth");
+const auth = require("../../../middelware/auth");
 
 const routes = express.Router();
 
 routes.get(
     '/categories-list',
-    // auth(["admin","employes"]),
+    auth(["admin","user"]),
     categoriescontroller.listcategories
 )
 

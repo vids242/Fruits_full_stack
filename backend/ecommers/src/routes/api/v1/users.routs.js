@@ -4,12 +4,14 @@ const passport = require("passport");
 const exportpdfmake = require("../../../utils/pdfmake");
 const { sendOTP, verifyOTP } = require("../../../utils/twilio");
 const sendMail = require("../../../utils/nodemailer");
+const upload = require("../../../middelware/upload");
 
 
 const routes = express.Router();
 
 
 routes.post('/ragister',
+    upload.single('avtar'),
     usersController.ragister
 )
 
