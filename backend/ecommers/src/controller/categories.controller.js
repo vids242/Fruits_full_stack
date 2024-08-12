@@ -1,6 +1,6 @@
 const Categories = require("../models/categories.models")
 
-const listcategories = async (req, res) => {
+const listcategories = (role=[]) => async (req, res) => {
     console.log("category", req.query.page, req.query.pageSize);
     try {
         const page = parseInt(req.query.page);

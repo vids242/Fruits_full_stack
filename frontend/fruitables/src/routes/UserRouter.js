@@ -10,9 +10,8 @@ import Contact from '../user/container/Contact/Contact';
 import Review from '../user/container/Review/Review';
 import Cart from '../user/container/Cart/Cart';
 import { ThemeContext } from '../Context/ThemeContext';
-import Ragister from '../user/container/Ragister/Ragister';
-import Login from '../user/container/Login/Login';
 import Chat from '../user/container/Chat/Chat';
+import AuthForm from '../user/container/AuthForm/AuthForm';
 
 function UserRouter(props) {
     const theme = useContext(ThemeContext)
@@ -30,8 +29,7 @@ function UserRouter(props) {
                 <Route exact path="/cart" element={<Cart />} />
                 <Route path='/contact' element={<Contact />} />
                 <Route path='/review' element={<Review />} />
-                <Route path='/register' element={<Ragister />} />
-                <Route path='/login' element={<Login />} />
+                <Route path='/authform' element={<AuthForm />} />
             </Routes>
             <Footer />
         </div>

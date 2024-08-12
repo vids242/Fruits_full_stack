@@ -8,7 +8,7 @@ const routes = express.Router();
 
 routes.get(
     '/categories-list',
-    auth(["admin","user"]),
+    // auth(["admin","user"]),
     categoriescontroller.listcategories
 )
 

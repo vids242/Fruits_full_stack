@@ -11,7 +11,7 @@ const routes = express.Router();
 
 
 routes.post('/ragister',
-    upload.single('avtar'),
+   // upload.single('avtar'),
     usersController.ragister
 )
 

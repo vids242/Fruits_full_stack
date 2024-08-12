@@ -116,7 +116,7 @@ function Header(props) {
                                         <span className="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style={{ top: '-5px', left: 15, height: 20, minWidth: 20 }}>{total}</span>
                                     </a>
                                 </NavLink>
-                                <NavLink to={'/register'} className="my-auto">
+                                <NavLink to={'/authform'} className="my-auto">
                                     <i className="fas fa-user fa-2x" />
                                 </NavLink>
                             </div>

@@ -1,7 +1,9 @@
 var jwt = require('jsonwebtoken');
 const Users = require('../models/users.models');
 
-const auth = (roles) => async(req,res,next) => {
+const auth = (roles=[]) => async(req,res,next) => {
+    console.log(roles);
+    
     try {
         const token = req.cookies.accesstoken || req.header("Authorization")?.replace("Bearer ","")
 
