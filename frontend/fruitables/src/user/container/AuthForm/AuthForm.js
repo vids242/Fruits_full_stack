@@ -1,201 +1,175 @@
 import React, { useState } from 'react';
-import { object, string } from 'yup';
+import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { ragister } from '../../../redux/slice/authform.slice';
+import { login, ragister } from '../../../redux/slice/authform.slice';
+import { Navigate } from 'react-router-dom';
 
+function AuthForm(props) {
+    const [type, setType] = useState('login');
 
-const AuthForm = () => {
-    // Set initial form type to 'signup'
-    const [formType, setFormType] = useState('signup'); // 'signup', 'login', 'forgot'
     const dispatch = useDispatch();
 
-    const auth = useSelector(state => state.auth)
+    const auth = useSelector((state) => state.auth);
+
     console.log(auth);
-    
-    const registerSchema = object({
-        name: string().required("Please Enter Name"),
-        email: string().required("Please Enter Email"),
-        password: string().required("Please Enter Password")
-    });
 
-    const loginSchema = object({
-        email: string().required("Please Enter Email"),
-        password: string().required("Please Enter Password")
-    });
 
-    const forgotPasswordSchema = object({
-        email: string().required("Please Enter Email"),
-    });
+    let authSchema = {}, initialVal = {};
 
-    const formik = useFormik({
-        initialValues: {
+    if (type === 'signup') {
+        authSchema = yup.object({
+            name: yup.string().required("Enter your name"),
+            email: yup.string().required("Enter your email").email("Enter valid email"),
+            password: yup.string().required().min(5, 'Password must be 5 characters long')
+        });
+
+        initialVal = {
             name: '',
             email: '',
+            password: ''
+        }
+    } else if (type === 'login') {
+        authSchema = yup.object({
+            email: yup.string().required("Enter your email").email("Enter valid email"),
+            password: yup.string().required().min(5, 'Password must be 5 characters long')
+        });
+
+        initialVal = {
+            email: '',
             password: '',
-        },
-        validationSchema: formType === 'signup' ? registerSchema :
-            formType === 'login' ? loginSchema :
-                forgotPasswordSchema,
-        onSubmit: async (values, { resetForm }) => {
-            try {
-                if (formType === 'signup') {
-                    dispatch(ragister({ ...values, 'role': 'user' }))
-                    console.log("signup Page");
-                } else if (formType === 'login') {
-                    console.log("login Page");
-                } else if (formType === 'forgot') {
-                    console.log("forgot Page");
-                }
-                resetForm();
-            } catch (error) {
-                console.log(error);
+        }
+    } else {
+        authSchema = yup.object({
+            email: yup.string().required("Enter your email").email("Enter valid email"),
+        });
+
+        initialVal = {
+            email: '',
+        }
+    }
+
+    let formikObj = useFormik({
+        initialValues: initialVal,
+        validationSchema: authSchema,
+        onSubmit: values => {
+            if (type === 'signup') {
+                dispatch(ragister({ ...values, 'role': 'user' }))
+            } else if (type === 'login') {
+                dispatch(login(values))
+               
+            } else {
+
             }
         },
-    });
+    })
 
-    const { handleSubmit, handleChange, handleBlur, errors, touched, values } = formik;
+    let { handleSubmit, handleChange, handleBlur, touched, errors, values } = formikObj;
 
-    const renderSignupForm = () => (
-        <form onSubmit={handleSubmit}>
-            <h2>Sign Up</h2>
-            <div className="row g-4">
-                <div className="col-lg-6">
-                    <div className="border-bottom rounded">
-                        <input
-                            type="text"
-                            className="form-control border-0"
-                            placeholder="Your Name*"
-                            name="name"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.name}
-                        />
-                        {errors.name && touched.name ? <span style={{ color: "red" }}>{errors.name}</span> : null}
-                    </div>
-                </div>
-                <div className="col-lg-6">
-                    <div className="border-bottom rounded">
-                        <input
-                            type="email"
-                            className="form-control border-0"
-                            placeholder="Your Email *"
-                            name="email"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.email}
-                        />
-                        {errors.email && touched.email ? <span style={{ color: "red" }}>{errors.email}</span> : null}
-                    </div>
-                </div>
-                <div className="col-lg-6">
-                    <div className="border-bottom rounded">
-                        <input
-                            type="password"
-                            className="form-control border-0"
-                            placeholder="Your Password"
-                            name="password"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.password}
-                        />
-                        {errors.password && touched.password ? <span style={{ color: "red" }}>{errors.password}</span> : null}
-                    </div>
-                </div>
-                <p onClick={() => setFormType('login')}>Already have an account ? Login</p>
-                <div className="col-lg-12">
-                    <div className="d-flex justify-content-between py-3 mb-5">
-                        <button type="submit" className="btn border border-secondary text-primary rounded-pill px-4 py-3">Submit</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    );
+    // console.log(authSchema);
 
-    const renderLoginForm = () => (
-        <form onSubmit={handleSubmit}>
-            <h2>Login</h2>
-            <div className="row g-4">
-                <div className="col-lg-12">
-                    <div className="border-bottom rounded">
-                        <input
-                            type="email"
-                            className="form-control border-0"
-                            placeholder="Your Email *"
-                            name="email"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.email}
-                        />
-                        {errors.email && touched.email ? <span style={{ color: "red" }}>{errors.email}</span> : null}
-                    </div>
-                </div>
-                <div className="col-lg-12">
-                    <div className="border-bottom rounded ">
-                        <input
-                            type="password"
-                            className="form-control border-0"
-                            placeholder="Your Password"
-                            name="password"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.password}
-                        />
-                        {errors.password && touched.password ? <span style={{ color: "red" }}>{errors.password}</span> : null}
-                    </div>
-                </div>
-                <div className="col-lg-12">
-                    <div className="d-flex justify-content-between py-3 mb-5">
-                        <button type="submit" className="btn border border-secondary text-primary rounded-pill px-4 py-3">Login</button>
-                    </div>
-                </div>
-            </div>
-            <p onClick={() => setFormType('forgot')}>Forgot Password?</p>
-            <p onClick={() => setFormType('signup')}>Don't have an account? Sign Up</p>
-        </form>
-    );
+    // console.log(initialVal);
 
-    const renderForgotPasswordForm = () => (
-        <form onSubmit={handleSubmit}>
-            <h2>Forgot Password</h2>
-            <div className="row g-4">
-                <div className="col-lg-12">
-                    <div className="border-bottom rounded">
-                        <input
-                            type="email"
-                            className="form-control border-0"
-                            placeholder="Your Email *"
-                            name="email"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.email}
-                        />
-                        {errors.email && touched.email ? <span style={{ color: "red" }}>{errors.email}</span> : null}
-                    </div>
-                </div>
-                <div className="col-lg-12">
-                    <div className="d-flex justify-content-between py-3 mb-5">
-                        <button type="submit" className="btn border border-secondary text-primary rounded-pill px-4 py-3">Submit</button>
-                    </div>
-                </div>
-            </div>
-            <p onClick={() => setFormType('login')}>Remember your password? Login</p>
-        </form>
-    );
 
+    if (auth.isAuthenticated) {
+        return <Navigate to="/" />
+    }
+    // console.log(errors, touched);
     return (
-        <div className="container-fluid py-5 mt-5">
-            <div className="container py-5">
-                <div className="row g-4 mb-5">
-                    <div className="auth-form">
-                        {formType === 'signup' && renderSignupForm()}
-                        {formType === 'login' && renderLoginForm()}
-                        {formType === 'forgot' && renderForgotPasswordForm()}
-                    </div>
+        <div>
+            {/* Single Page Header start */}
+            <div className="container-fluid page-header py-5">
+                <h1 className="text-center text-white display-6">
+                    {
+                        type === 'login' ? "Login" :
+                            type === 'signup' ? "Signup" : "Forgot Password?"
+                    }
+                </h1>
+                <ol className="breadcrumb justify-content-center mb-0">
+                    <li className="breadcrumb-item"><a href="#">Home</a></li>
+                    <li className="breadcrumb-item"><a href="#">Pages</a></li>
+                    <li className="breadcrumb-item active text-white">
+                        {
+                            type === 'login' ? "Login" :
+                                type === 'signup' ? "Signup" : "Forgot Password?"
+                        }
+                    </li>
+                </ol>
+            </div>
+            <div className="container-fluid fruite py-5">
+                <div className="container py-5">
+                    <form onSubmit={handleSubmit} method='post'>
+                        <div>
+                            {
+                                type === 'signup' ?
+                                    <div className="mb-3">
+                                        <label htmlFor="name" className="form-label">Name</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            name='name'
+                                            id='name'
+                                            placeholder="Please enter your name"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.name}
+                                        />
+                                        <span>{errors.name && touched.name ? errors.name : null}</span>
+                                    </div>
+                                    : null
+                            }
+
+                            <div className="mb-3">
+                                <label htmlFor="email" className="form-label">Email address</label>
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    name='email'
+                                    id='email'
+                                    placeholder="Please enter your name"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.email}
+                                />
+                                <span>{errors.email && touched.email ? errors.email : null}</span>
+                            </div>
+                            {
+                                type !== 'forgot' ?
+                                    <div className="mb-3">
+                                        <label htmlFor="password" className="form-label">Password</label>
+
+                                        <input
+                                            type="password"
+                                            className="form-control"
+                                            name='password'
+                                            id='password'
+                                            placeholder="Please enter your name"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.password}
+                                        />
+                                        <span>{errors.password && touched.password ? errors.password : null}</span>
+                                    </div>
+                                    : null
+                            }
+
+                            {
+                                type === 'signup' ?
+                                    <p>Already have an account? <a href="#" class="link-primary" onClick={() => setType('login')}>Login</a></p>
+                                    :
+                                    <>
+                                        <a href="#" class="link-primary" onClick={() => setType('forgot')}>Forgot Password?</a>
+                                        <p>Don't have an account? <a href="#" class="link-primary" onClick={() => setType('signup')}>Signup</a></p>
+                                    </>
+                            }
+
+                        </div>
+                        <button type="submit" className="btn btn-primary">Submit</button>
+                    </form>
                 </div>
             </div>
         </div>
     );
-};
+}
 
 export default AuthForm;

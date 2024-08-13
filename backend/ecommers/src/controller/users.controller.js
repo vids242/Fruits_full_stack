@@ -79,7 +79,7 @@ const ragister = async (req, res) => {
             })
         }
         //after ragistartion is complet mail sended
-        await sendMail(email)
+        // await sendMail(email)
 
         res.status(201).json({
             success: true,

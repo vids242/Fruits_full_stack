@@ -25,7 +25,21 @@ export const ragister = createAsyncThunk(
         }
     }
 )
-
+export const login = createAsyncThunk(
+    'auth/login',
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await axios.post(Base_url + 'users/login', data)
+            console.log(response);
+            if (response.status === 200) {
+                return response
+            }
+        } catch (error) {
+            // console.log(error);
+            return rejectWithValue("Login Error " + error.response.data.message)
+        }
+    }
+)
 const AuthSlice = createSlice({
     name: 'auth',
     initialState,
@@ -45,6 +59,24 @@ const AuthSlice = createSlice({
             state.user = null;
             state.error = action.payload;
         });
+
+        builder.addCase(login.fulfilled, (state, action) => {
+            state.isAuthentication = true;
+            state.isLoggedOut = false;
+            state.isLoding = false;
+            state.user = action.payload.data;
+            state.error = null;
+        });
+
+        builder.addCase(login.rejected, (state, action) => {
+            state.isAuthentication = false;
+            state.isLoggedOut = true;
+            state.isLoding = false;
+            state.user = null;
+            state.error = action.payload;
+        });
+
+
 
     }
 })
