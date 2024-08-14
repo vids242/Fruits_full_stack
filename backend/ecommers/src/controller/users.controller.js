@@ -61,7 +61,7 @@ const ragister = async (req, res) => {
         }
         const hashPassword = await bcrypt.hash(password, 10)
 
-        const userData = await Users.create({ ...req.body, password: hashPassword,  }) //avtar: req.file.path
+        const userData = await Users.create({ ...req.body, password: hashPassword, }) //avtar: req.file.path
 
         if (!userData) {
             return res.status(500).json({
@@ -111,6 +111,7 @@ const verifyOTP = async (req, res) => {
         message: "otp verify successfully ."
     })
 }
+
 const login = async (req, res) => {
     try {
         const { email, password } = req.body
@@ -258,10 +259,13 @@ const logout = async (req, res) => {
             })
         }
 
-        res.status(200).json({
-            success: true,
-            message: "User Logged Out"
-        })
+        res.status(200)
+            .clearCookie("accessToken")
+            .clearCookie("refreshToken")
+            .json({
+                success: true,
+                message: "User Logged Out"
+            })
     } catch (error) {
         return res.status(500).json({
             success: false,

@@ -52,16 +52,14 @@ function AuthForm(props) {
     let formikObj = useFormik({
         initialValues: initialVal,
         validationSchema: authSchema,
+        enableReinitialize: true,
         onSubmit: values => {
             if (type === 'signup') {
                 dispatch(ragister({ ...values, 'role': 'user' }))
             } else if (type === 'login') {
                 dispatch(login(values))
-               
-            } else {
-
             }
-        },
+        }
     })
 
     let { handleSubmit, handleChange, handleBlur, touched, errors, values } = formikObj;
@@ -71,9 +69,10 @@ function AuthForm(props) {
     // console.log(initialVal);
 
 
-    if (auth.isAuthenticated) {
+    if (auth.isAuthentication) {
         return <Navigate to="/" />
     }
+
     // console.log(errors, touched);
     return (
         <div>
@@ -114,7 +113,7 @@ function AuthForm(props) {
                                             onBlur={handleBlur}
                                             value={values.name}
                                         />
-                                        <span>{errors.name && touched.name ? errors.name : null}</span>
+                                        <span style={{ color: "red" }}>{errors.name && touched.name ? errors.name : null}</span>
                                     </div>
                                     : null
                             }
@@ -131,7 +130,7 @@ function AuthForm(props) {
                                     onBlur={handleBlur}
                                     value={values.email}
                                 />
-                                <span>{errors.email && touched.email ? errors.email : null}</span>
+                                <span style={{ color: "red" }}>{errors.email && touched.email ? errors.email : null}</span>
                             </div>
                             {
                                 type !== 'forgot' ?
@@ -148,7 +147,7 @@ function AuthForm(props) {
                                             onBlur={handleBlur}
                                             value={values.password}
                                         />
-                                        <span>{errors.password && touched.password ? errors.password : null}</span>
+                                        <span style={{ color: "red" }}>{errors.password && touched.password ? errors.password : null}</span>
                                     </div>
                                     : null
                             }

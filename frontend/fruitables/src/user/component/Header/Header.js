@@ -7,12 +7,16 @@ import NightsStayIcon from '@mui/icons-material/NightsStay';
 import { getProducts } from '../../../redux/action/products.action';
 import { getData } from '../../../redux/action/category.action';
 import { getSubData } from '../../../redux/slice/subCategory.slice';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { logout } from '../../../redux/slice/authform.slice';
 
 function Header(props) {
     const dispatch = useDispatch();
     const [subcat, setSubcat] = useState([])
     const qty = useSelector(state => state.cart)
     // console.log(qty.cart);
+    const { isAuthentication ,user} = useSelector((state) => state.auth);
+
 
     const total = qty.cart.reduce((a, v) => a + v.qty, 0)
 
@@ -52,6 +56,10 @@ function Header(props) {
 
         navigate('/Shop', { state: { subcategory_id } });
     };
+
+    const handalLogout = () => {
+        dispatch(logout(user._id))
+    }
     return (
 
         <div>
@@ -116,9 +124,11 @@ function Header(props) {
                                         <span className="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style={{ top: '-5px', left: 15, height: 20, minWidth: 20 }}>{total}</span>
                                     </a>
                                 </NavLink>
-                                <NavLink to={'/authform'} className="my-auto">
-                                    <i className="fas fa-user fa-2x" />
-                                </NavLink>
+                                {
+                                    isAuthentication ? <LogoutIcon fontSize='large' onClick={handalLogout}/> : <NavLink to={'/authform'} className="my-auto">
+                                        <i className="fas fa-user fa-2x" />
+                                    </NavLink>
+                                }
                             </div>
                             <>
                                 {
