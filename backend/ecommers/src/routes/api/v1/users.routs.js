@@ -70,4 +70,8 @@ routes.get('/mail',
 routes.post('/pdf',
     exportpdfmake
 )
+
+routes.get('/checkAuth',
+    usersController.checkAuth
+)
 module.exports = routes;

@@ -116,25 +116,22 @@ function Header(props) {
                                 </div>
                                 <NavLink to="/contact" className="nav-item nav-link">Contact</NavLink>
                             </div>
-                            <div className="d-flex m-3 me-0">
+                            <div className="d-flex m-3 me-0 align-items-center">
                                 <button className="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal"><i className="fas fa-search text-primary" /></button>
-                                <NavLink to={'/cart'}>
-                                    <a href="#" className="position-relative me-4 my-auto">
+                                <NavLink to={'/cart'} className="position-relative me-4 my-auto">
                                         <i className="fa fa-shopping-bag fa-2x" />
                                         <span className="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style={{ top: '-5px', left: 15, height: 20, minWidth: 20 }}>{total}</span>
-                                    </a>
                                 </NavLink>
                                 {
-                                    isAuthentication ? <LogoutIcon fontSize='large' onClick={handalLogout}/> : <NavLink to={'/authform'} className="my-auto">
+                                    isAuthentication ? <LogoutIcon fontSize='large' className='me-2' onClick={handalLogout}/> : <NavLink to={'/authform'} className="my-auto">
                                         <i className="fas fa-user fa-2x" />
                                     </NavLink>
                                 }
-                            </div>
-                            <>
                                 {
-                                    themeContext.theme === 'light' ? <LightModeIcon onClick={hendalTheme} /> : <NightsStayIcon onClick={hendalTheme} />
+                                    themeContext.theme === 'light' ? <LightModeIcon  className='ms-1' onClick={hendalTheme} fontSize='large' /> : <NightsStayIcon className='ms-1' onClick={hendalTheme} fontSize='large' />
                                 }
-                            </>
+                            </div>
+                            
                         </div>
                     </nav>
                 </div>

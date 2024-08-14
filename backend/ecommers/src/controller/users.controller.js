@@ -18,16 +18,16 @@ const createToken = async (id) => {
             {
                 _id: user._id,
                 role: user.role,
-                expiresIn: 360000
+                expiresIn: 3600
             },
             process.env.ACCESSTOKEN,
-            { expiresIn: 360000 }
+            { expiresIn: 3600 }
         )
 
         const refreshToken = await jwt.sign(
             { _id: id },
             process.env.REFRESHTOKEN,
-            { expiresIn: '1 day' }
+            { expiresIn: '10 day' }
         )
 
         user.refreshToken = refreshToken
@@ -142,14 +142,21 @@ const login = async (req, res) => {
 
         const userDataF = await Users.findById({ _id: user._id }).select("-password -refreshToken")
 
-        const option = {
+        const optionAcc = {
             httpOnly: true,
-            secure: true
+            secure: true,
+            maxAge: 60 * 60 * 1000
+        }
+
+        const optionRef = {
+            httpOnly: true,
+            secure: true,
+            maxAge: 60 * 60 * 24 * 10 * 1000
         }
 
         res.status(200)
-            .cookie("accessToken", accessToken, option)
-            .cookie("refreshToken", refreshToken, option)
+            .cookie("accessToken", accessToken, optionAcc)
+            .cookie("refreshToken", refreshToken, optionRef)
             .json({
                 success: true,
                 message: "login successfull",
@@ -275,11 +282,48 @@ const logout = async (req, res) => {
 
 }
 
+const checkAuth = async (req, res) => {
+    try {
+        const accessToken = await req.cookies.accessToken
+        console.log("accessToken",accessToken);
+
+        if (!accessToken) {
+            return res.status(400).json({
+                success: false,
+                message: "Token Not Found"
+            })
+        }
+
+        const verifyUser = await jwt.verify(accessToken, process.env.ACCESSTOKEN)
+        console.log("verifyUser",verifyUser);
+        
+
+        if (!verifyUser) {
+            return res.status(400).json({
+                success: false,
+                message: "Token Expire Or Invalid"
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            data: verifyUser,
+            message: "User Authenticated",
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "internal server error" + error.message
+        })
+    }
+}
 module.exports = {
     ragister,
     login,
     generateNewTokens,
     logout,
     ragisterOTP,
-    verifyOTP
+    verifyOTP,
+    checkAuth
 }
