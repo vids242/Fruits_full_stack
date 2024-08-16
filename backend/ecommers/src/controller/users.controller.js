@@ -288,7 +288,7 @@ const checkAuth = async (req, res) => {
         console.log("accessToken",accessToken);
 
         if (!accessToken) {
-            return res.status(400).json({
+            return res.status(401).json({
                 success: false,
                 message: "Token Not Found"
             })

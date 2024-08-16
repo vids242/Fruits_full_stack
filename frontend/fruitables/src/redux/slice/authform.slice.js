@@ -33,6 +33,7 @@ export const login = createAsyncThunk(
             const response = await axiosInstance.post( 'users/login', data)
             console.log(response);
             if (response.status === 200) {
+                localStorage.setItem("_id", response.data.data._id)
                 return response.data
             }
         } catch (error) {

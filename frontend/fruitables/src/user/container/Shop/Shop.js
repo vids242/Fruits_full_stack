@@ -282,7 +282,7 @@ function Shop(props) {
 
                                                     <div className="p-4">
                                                         <h4>{v.name}</h4>
-                                                        <p className='max-length' >{v.description}</p>
+                                                        <p className='max-length' >{v.discription}</p>
                                                         <p>{v.stock} / Pcs.</p>
                                                         <div className="d-flex justify-content-between flex-lg-wrap">
                                                             <p className="text-dark fs-5 fw-bold mb-0">${v.price} / kg</p>
