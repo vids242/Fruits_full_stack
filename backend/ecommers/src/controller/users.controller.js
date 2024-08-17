@@ -18,7 +18,7 @@ const createToken = async (id) => {
             {
                 _id: user._id,
                 role: user.role,
-                expiresIn: 3600
+                expiresIn: "1 hours"
             },
             process.env.ACCESSTOKEN,
             { expiresIn: 3600 }
@@ -325,5 +325,6 @@ module.exports = {
     logout,
     ragisterOTP,
     verifyOTP,
-    checkAuth
+    checkAuth,
+    createToken
 }

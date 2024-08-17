@@ -4,6 +4,8 @@ import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, ragister } from '../../../redux/slice/authform.slice';
 import { Navigate } from 'react-router-dom';
+import GoogleIcon from '@mui/icons-material/Google';
+import { Badge } from 'reactstrap';
 
 function AuthForm(props) {
     const [type, setType] = useState('login');
@@ -71,6 +73,10 @@ function AuthForm(props) {
 
     if (auth.isAuthentication) {
         return <Navigate to="/" />
+    }
+
+    const hendlGoogleLogin  = () => {
+        window.location.href = "http://localhost:8000/api/v1/users/googleLogin"
     }
 
     // console.log(errors, touched);
@@ -165,6 +171,25 @@ function AuthForm(props) {
                         </div>
                         <button type="submit" className="btn btn-primary">Submit</button>
                     </form>
+                    <Badge
+                        color="primary"
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '200px',
+                            height: '50px',
+                            margin: '20px 0',
+                            fontSize: '16px',
+                            cursor: 'pointer',
+                            padding: '10px',
+                            borderRadius: '8px'
+                        }}
+                    onClick={hendlGoogleLogin}
+                    >
+                    <GoogleIcon style={{ marginRight: '8px' }} />
+                    <span>Sign in With Google</span>
+                </Badge> 
                 </div>
             </div>
         </div>

@@ -39,10 +39,15 @@ const GoogleProvider = async () => {
         });
 
         passport.deserializeUser(async function (id, done) {
-            await Users.findById(id, function (err, user) {
-                console.log("deserializeUserok");
-                done(err, user);
-            });
+            try {
+                const user = await Users.findById(id);
+                done(null, user);
+                console.log("deserializeUser",user);
+                
+            } catch (error) {
+                done(error, null);
+            }
+            
         });
     } catch (error) {
         console.log(error);
@@ -112,14 +117,14 @@ const FacebookProvider = async () => {
                 done(err, null);
             }
         });
-        
+
     } catch (error) {
         console.error("Error initializing FacebookProvider:", error.message);
     }
 };
 
 
-module.exports ={GoogleProvider,FacebookProvider}
+module.exports = { GoogleProvider, FacebookProvider }
 
 
 
