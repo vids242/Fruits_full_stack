@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axiosInstance from "../../utils/axiosinstance"
+import { setAlert } from "./alert.slice"
 
 const initialState = {
     isAuthentication: false,
@@ -11,16 +12,18 @@ const initialState = {
 
 export const ragister = createAsyncThunk(
     'auth/ragister',
-    async (data, { rejectWithValue }) => {
+    async (data, {dispatch, rejectWithValue }) => {
         try {
             const response = await axiosInstance.post( 'users/ragister', data)
             console.log(response);
 
             if (response.status === 201) {
+                dispatch(setAlert({color:"success",message:response.data.message}))
                 return response.data
             }
         } catch (error) {
             // console.log(error);
+            dispatch(setAlert({color:"error",message:error.data.message}))
             return rejectWithValue("Ragistration Error " + error.response.data.message)
         }
     }
@@ -28,16 +31,18 @@ export const ragister = createAsyncThunk(
 
 export const login = createAsyncThunk(
     'auth/login',
-    async (data, { rejectWithValue }) => {
+    async (data, {dispatch, rejectWithValue }) => {
         try {
             const response = await axiosInstance.post( 'users/login', data)
             console.log(response);
             if (response.status === 200) {
                 localStorage.setItem("_id", response.data.data._id)
+                dispatch(setAlert({color:"success",message:response.data.message}))
                 return response.data
             }
         } catch (error) {
             // console.log(error);
+            dispatch(setAlert({color:"error",message:error.data.message}))
             return rejectWithValue("Login Error " + error.response.data.message)
         }
     }
@@ -45,15 +50,17 @@ export const login = createAsyncThunk(
 
 export const logout = createAsyncThunk(
     'auth/logout',
-    async (_id, { rejectWithValue }) => {
+    async (_id, { dispatch,rejectWithValue }) => {
         try {
             const response = await axiosInstance.post( 'users/logout', {_id})
             console.log(response);
             if (response.status === 200) {
+                dispatch(setAlert({color:"error",message:response.data.message}))
                 return response.data
             }
         } catch (error) {
             // console.log(error);
+            dispatch(setAlert({color:"error",message:error.data.message}))
             return rejectWithValue("LogOut Error " + error.response.data.message)
         }
     }
@@ -61,17 +68,19 @@ export const logout = createAsyncThunk(
 
 export const checkAuth = createAsyncThunk(
     'auth/checkAuth',
-    async (_, { rejectWithValue }) => {
+    async (_, { dispatch,rejectWithValue }) => {
         try {
             const response = await axiosInstance.get('users/checkAuth')
             console.log(response);
 
             if (response.data.success) {
+                dispatch(setAlert({color:"success",message:response.data.message}))
                 return response.data
             }
             
         } catch (error) {
             // console.log(error);
+            dispatch(setAlert({color:"error",message:error.data.message}))
             return rejectWithValue("checkAuth Error " + error.response.data.message)
         }
     }

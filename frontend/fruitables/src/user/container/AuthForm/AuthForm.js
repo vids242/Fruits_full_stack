@@ -6,6 +6,7 @@ import { login, ragister } from '../../../redux/slice/authform.slice';
 import { Navigate } from 'react-router-dom';
 import GoogleIcon from '@mui/icons-material/Google';
 import { Badge } from 'reactstrap';
+import { setAlert } from '../../../redux/slice/alert.slice';
 
 function AuthForm(props) {
     const [type, setType] = useState('login');

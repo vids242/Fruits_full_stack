@@ -11,6 +11,7 @@ import { productsReducer } from "./product.reduces";
 import { variantReducer } from "./variant.reducer";
 import { salespeopleReducer } from "./salespeople.reducer";
 import AuthSlice from "../slice/authform.slice";
+import alertSlice from "../slice/alert.slice";
 
 export const RootReducer = combineReducers({
     facilites : FacilitesReducer,
@@ -24,5 +25,6 @@ export const RootReducer = combineReducers({
     subcategories : subCategorySlice,
     variant : variantReducer,
     salespeople: salespeopleReducer,
-    auth : AuthSlice
+    auth : AuthSlice,
+    alert : alertSlice
 })

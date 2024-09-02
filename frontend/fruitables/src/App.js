@@ -10,27 +10,30 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { ThemeProvider } from './Context/ThemeContext';
 import { ContactProvider } from './Context/reducer/ContactContext';
 
+import { SnackbarProvider} from 'notistack';
+import Alert from './user/component/Alert/Alert';
+
 function App() {
   const { store, persistor } = storeReduces()
 
   return (
-    <ContactProvider>
-      <ThemeProvider>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <Routes>
-              <Route exact path="/*" element={<UserRouter />} />
-              <Route element={<PrivateRoute />}>
-                <Route exact path="/admin/*" element={<AdminRouter />} />
-              </Route>
-
-            </Routes>
-          </PersistGate>
-        </Provider>
-      </ThemeProvider>
-    </ContactProvider>
-
-
+    <SnackbarProvider>
+      <ContactProvider>
+        <ThemeProvider>
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <Alert/>
+              <Routes>
+                <Route exact path="/*" element={<UserRouter />} />
+                <Route element={<PrivateRoute />}>
+                  <Route exact path="/admin/*" element={<AdminRouter />} />
+                </Route>
+              </Routes>
+            </PersistGate>
+          </Provider>
+        </ThemeProvider>
+      </ContactProvider>
+    </SnackbarProvider>
   );
 }
 
